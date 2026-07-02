@@ -155,31 +155,31 @@ canvas.overview{position:absolute;inset:0;width:100%;height:100%;cursor:pointer}
 #toast.show{opacity:1}
 
 /* ---------- normalize popover ---------- */
-#normPop{
+#normPop,#gainPop{
   position:fixed;display:none;z-index:9000;
   background:var(--panel);border:1px solid var(--line2);border-radius:6px;
   box-shadow:0 12px 32px rgba(0,0,0,.6);padding:10px;min-width:216px;
   font-size:12px;color:var(--text);
 }
-#normPop .row{display:flex;align-items:center;gap:6px;margin-bottom:8px}
-#normPop .row:last-child{margin-bottom:0}
-#normPop input{
+#normPop,#gainPop .row{display:flex;align-items:center;gap:6px;margin-bottom:8px}
+#normPop,#gainPop .row:last-child{margin-bottom:0}
+#normPop,#gainPop input{
   width:66px;font-family:var(--mono);font-size:12px;color:var(--amber);
   background:#10141a;border:1px solid var(--line2);border-radius:4px;padding:4px 6px;
   user-select:text;-webkit-user-select:text;text-align:right;
 }
-#normPop .presets button{
+#normPop,#gainPop .presets button{
   flex:1;font-family:var(--mono);font-size:10.5px;color:var(--text);
   background:#222a33;border:1px solid var(--line2);border-radius:4px;
   padding:4px 0;cursor:pointer;
 }
-#normPop .presets button:hover{background:#2b3540}
-#normPop .apply{
+#normPop,#gainPop .presets button:hover{background:#2b3540}
+#normPop,#gainPop .apply{
   width:100%;font-family:var(--ui);font-weight:600;font-size:12px;
   color:#1a120c;background:linear-gradient(#ffb36b,#ef8a4a);
   border:1px solid #b86a35;border-radius:4px;padding:6px 0;cursor:pointer;
 }
-#normPop .apply:hover{background:linear-gradient(#ffc285,#f59658)}
+#normPop,#gainPop .apply:hover{background:linear-gradient(#ffc285,#f59658)}
 
 /* ---------- about / license modal ---------- */
 #aboutBtn{
@@ -228,7 +228,7 @@ canvas.overview{position:absolute;inset:0;width:100%;height:100%;cursor:pointer}
 <div id="appbar">
   <div id="logo"><span class="name">CARVE</span><span class="sub">WAVE EDITOR · LISA RECORDS</span></div>
   <div class="spacer"></div>
-  <span id="hint">クリック=再生位置（←→微調整）　M=マーカー　Wクリック=マーカー間選択　選択中Space=ループ再生　↑↓縦ズーム</span>
+  <span id="hint">Click = cursor (←→ nudge) · Enter = play from start · M = marker (⇧M / dbl-click head = remove) · dbl-click = select between markers · Space = loop selection · Shift-drag = no zero-snap · ↑↓ v-zoom</span>
   <button id="aboutBtn">About</button>
   <button class="btn warm" id="openBtn">Open…</button>
   <input type="file" id="fileInput" accept="audio/*,.wav,.aif,.aiff,.flac,.mp3,.ogg,.m4a" multiple hidden>
@@ -237,7 +237,7 @@ canvas.overview{position:absolute;inset:0;width:100%;height:100%;cursor:pointer}
 <div id="desktop">
   <div id="empty">
     <div class="big">DROP AUDIO FILES</div>
-    <div class="small">WAV / AIFF / FLAC / MP3 をここにドロップ、または右上の Open から</div>
+    <div class="small">Drop WAV / AIFF / FLAC / MP3 files here, or use Open (top right)</div>
   </div>
 </div>
 
@@ -246,16 +246,16 @@ canvas.overview{position:absolute;inset:0;width:100%;height:100%;cursor:pointer}
 
 <div id="modalBack">
   <div id="aboutModal">
-    <button class="close" id="aboutClose" title="閉じる">×</button>
+    <button class="close" id="aboutClose" title="Close">×</button>
     <h2>CARVE</h2>
     <div class="tag">WAVE EDITOR · LISA RECORDS</div>
-    <p>ブラウザだけで動く波形エディタ。読み込んだ音声ファイルは<strong>あなたの端末の中だけ</strong>で処理され、サーバーへ送信・保存されることは一切ありません。インストール不要、アカウント不要。</p>
+    <p>A wave editor that runs entirely in your browser. Audio files you load are processed <strong>only on your device</strong> — nothing is ever uploaded to or stored on a server. No install, no account.</p>
 
     <h3>Features</h3>
-    <p>WAV / AIFF / FLAC / MP3 の読み込み、範囲選択、フェードイン・アウト（5カーブ）、ノーマライズ、選択範囲の削除・コピー／ペースト（現在位置に割り込み）・新規ファイル抽出、ループ再生、マーカー、ステータスバーの時間表示クリックでコピー、WAV書き出し（16/24-bit + TPDFディザ、32-bit float）、OGG Vorbis書き出し（VBR品質指定）、MP3書き出し（CBRビットレート指定）。</p>
+    <p>Loads WAV / AIFF / FLAC / MP3. Range selection with zero-cross snapping (hold Shift for raw selection), fade in/out (5 curves), normalize, gain (±dB), delete / copy / paste (insert at cursor) / extract selection to a new file, loop playback, play-from-start, loop seam check (auditions the end→start transition), markers (add / remove / clear), undo/redo, OGG loop tags (LOOPSTART / LOOPLENGTH read into markers on import, and embedded from markers 1–2 on export), click-to-copy time readouts in the status bar. Exports WAV (16/24-bit + TPDF dither, 32-bit float), OGG Vorbis (VBR quality) and MP3 (CBR bitrate).</p>
 
     <h3>Credits</h3>
-    <p>Designed &amp; built by <a href="https://lisareco.com" target="_blank" rel="noopener">来兎 / 株式会社リサレコ</a>.</p>
+    <p>Designed &amp; built by <a href="https://lisareco.com" target="_blank" rel="noopener">Raito / Lisa Records Inc. (株式会社リサレコ)</a>.</p>
     <p>OGG Vorbis encoding by <a href="https://github.com/arseneyr/wasm-media-encoders" target="_blank" rel="noopener">wasm-media-encoders</a>, which bundles the Xiph.Org <a href="https://xiph.org/vorbis/" target="_blank" rel="noopener">libVorbis</a> codec.</p>
     <p>MP3 encoding by the same library, which bundles the <a href="https://lame.sourceforge.io/" target="_blank" rel="noopener">LAME</a> MP3 encoder (LGPL).</p>
 
@@ -279,11 +279,11 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE FOUNDATION OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE.</div>
 
-    <p>読み込んだファイルのサンプルレートは元の値をそのまま保持します（48kHzは48kHzのまま。ブラウザ出力レートへの自動リサンプルはしません）。WAV / AIFF / FLAC / MP3 はヘッダから正確なレートを読み取ります。</p>
+    <p>Loaded files keep their original sample rate (48kHz stays 48kHz — no automatic resampling to the browser output rate). For WAV / AIFF / FLAC / MP3 the exact rate is read from the file header.</p>
 
     <h3>Disclaimer</h3>
-    <p>本ツールは現状有姿で提供されます。処理結果について作者は責任を負いません。重要な音源は必ずバックアップの上ご利用ください。</p>
-    <p style="color:#6e7a86;font-size:11px;margin-top:14px">Version 2026.06.25c　·　© 2026 株式会社リサレコ (Lisa Records)</p>
+    <p>This tool is provided as-is. The author accepts no liability for the results of any processing. Always keep backups of important audio files.</p>
+    <p style="color:#6e7a86;font-size:11px;margin-top:14px">Version 2026.07.02d · © 2026 Lisa Records Inc. (株式会社リサレコ)</p>
   </div>
 </div>
 
@@ -327,7 +327,7 @@ function fallbackCopy(text, done){
   document.body.appendChild(ta);
   ta.focus(); ta.select();
   try{ document.execCommand('copy'); if(done) done(); }
-  catch(e){ toast('コピーに失敗しました'); }
+  catch(e){ toast('Copy failed'); }
   document.body.removeChild(ta);
 }
 const clamp = (v,a,b)=>Math.max(a,Math.min(b,v));
@@ -374,67 +374,72 @@ function createWindow(name, sampleRate, channels, x, y){
       <span class="fname"></span>
       <span class="meta"></span>
       <span class="spacer"></span>
-      <button class="closebtn" title="閉じる">×</button>
+      <button class="closebtn" title="Close">×</button>
     </div>
     <div class="toolbar">
-      <button class="tbtn play" data-a="play" title="再生 / 停止 (Space)">▶</button>
+      <button class="tbtn" data-a="playstart" title="Play from the start (Enter)">⏮</button>
+      <button class="tbtn play" data-a="play" title="Play / Stop (Space)">▶</button>
+      <button class="tbtn" data-a="seam" title="Loop seam check — plays up to 1s before the end, then 1s from the start (selection, or whole file if none). Tip: markers 1–2 become OGG loop tags on export">Seam</button>
       <span class="tsep"></span>
-      <button class="tbtn" data-a="zin"  title="ズームイン">＋</button>
-      <button class="tbtn" data-a="zout" title="ズームアウト">−</button>
-      <button class="tbtn" data-a="zfit" title="全体表示">Fit</button>
-      <button class="tbtn" data-a="zsel" title="選択範囲にズーム">Zoom Sel</button>
-      <button class="tbtn" data-a="vin"  title="縦ズームイン (↑)">V＋</button>
-      <button class="tbtn" data-a="vout" title="縦ズームアウト (↓)">V−</button>
+      <button class="tbtn" data-a="zin"  title="Zoom in">＋</button>
+      <button class="tbtn" data-a="zout" title="Zoom out">−</button>
+      <button class="tbtn" data-a="zfit" title="Fit whole file">Fit</button>
+      <button class="tbtn" data-a="zsel" title="Zoom to selection">Zoom Sel</button>
+      <button class="tbtn" data-a="vin"  title="Vertical zoom in (↑)">V＋</button>
+      <button class="tbtn" data-a="vout" title="Vertical zoom out (↓)">V−</button>
       <span class="tsep"></span>
-      <select class="fadecurve" title="フェードカーブ">
-        <option value="lin" selected>直線</option>
-        <option value="log">なだらか・早</option>
-        <option value="exp">なだらか・遅</option>
-        <option value="s1">S字</option>
-        <option value="s2">S字・急</option>
+      <select class="fadecurve" title="Fade curve">
+        <option value="lin" selected>Linear</option>
+        <option value="log">Smooth · fast</option>
+        <option value="exp">Smooth · slow</option>
+        <option value="s1">S-curve</option>
+        <option value="s2">S-curve · steep</option>
       </select>
-      <button class="tbtn" data-a="fadein"  title="選択範囲をフェードイン">Fade In</button>
-      <button class="tbtn" data-a="fadeout" title="選択範囲をフェードアウト">Fade Out</button>
-      <button class="tbtn" data-a="norm" title="ノーマライズ（目標ピークdBFSを指定）">Normalize</button>
+      <button class="tbtn" data-a="fadein"  title="Fade in selection">Fade In</button>
+      <button class="tbtn" data-a="fadeout" title="Fade out selection">Fade Out</button>
+      <button class="tbtn" data-a="norm" title="Normalize (set target peak dBFS)">Normalize</button>
+      <button class="tbtn" data-a="gain" title="Gain — amplify or attenuate by dB (selection or whole file)">Gain</button>
       <span class="tsep"></span>
-      <button class="tbtn" data-a="extract" title="選択範囲を新規ファイルへ">Extract → New</button>
-      <button class="tbtn" data-a="copy" title="選択範囲をコピー (⌘C)">Copy</button>
-      <button class="tbtn" data-a="paste" title="現在位置に割り込みペースト (⌘V)" disabled>Paste</button>
-      <button class="tbtn" data-a="del" title="選択範囲を削除 (Del)">Delete</button>
-      <button class="tbtn" data-a="undo" title="取り消し (⌘Z)" disabled>Undo</button>
+      <button class="tbtn" data-a="extract" title="Extract selection to a new file">Extract → New</button>
+      <button class="tbtn" data-a="copy" title="Copy selection (⌘C)">Copy</button>
+      <button class="tbtn" data-a="paste" title="Insert-paste at cursor (⌘V)" disabled>Paste</button>
+      <button class="tbtn" data-a="del" title="Delete selection (Del)">Delete</button>
+      <button class="tbtn" data-a="clearmk" title="Remove all markers — double-click a marker head to remove just one, ⇧M removes the one nearest the cursor">Clear Mk</button>
+      <button class="tbtn" data-a="undo" title="Undo (⌘Z)" disabled>Undo</button>
+      <button class="tbtn" data-a="redo" title="Redo (⇧⌘Z / ⌘Y)" disabled>Redo</button>
     </div>
     <div class="canvaswrap"><canvas class="wave"></canvas></div>
     <div class="overviewwrap"><canvas class="overview"></canvas></div>
     <div class="statusbar">
-      <span class="copyable" data-copy="len" title="クリックでコピー">len <b class="st-len"></b></span>
-      <span class="copyable" data-copy="sel" title="クリックでコピー">sel <b class="st-sel">—</b></span>
-      <span class="copyable" data-copy="cur" title="クリックでコピー">cur <b class="st-cur">—</b></span>
+      <span class="copyable" data-copy="len" title="Click to copy">len <b class="st-len"></b></span>
+      <span class="copyable" data-copy="sel" title="Click to copy">sel <b class="st-sel">—</b></span>
+      <span class="copyable" data-copy="cur" title="Click to copy">cur <b class="st-cur">—</b></span>
       <span>peak <b class="st-peak"></b> dB</span>
       <span class="spacer"></span>
-      <select class="fmt" title="書き出しフォーマット">
+      <select class="fmt" title="Export format">
         <option value="24" selected>24-bit PCM</option>
         <option value="16">16-bit PCM</option>
         <option value="32f">32-bit float</option>
         <option value="ogg">OGG Vorbis</option>
         <option value="mp3">MP3</option>
       </select>
-      <select class="oggq" title="OGG品質（VBR） 数値が高いほど高音質・大容量" style="display:none">
+      <select class="oggq" title="OGG quality (VBR) — higher = better quality, larger file" style="display:none">
         <option value="2">q2 ≈96kbps</option>
         <option value="3">q3 ≈112kbps</option>
         <option value="4">q4 ≈128kbps</option>
         <option value="5">q5 ≈160kbps</option>
         <option value="6" selected>q6 ≈192kbps</option>
         <option value="8">q8 ≈256kbps</option>
-        <option value="9.9">q9.9 最高</option>
+        <option value="9.9">q9.9 best</option>
       </select>
-      <select class="mp3q" title="MP3ビットレート（CBR）" style="display:none">
+      <select class="mp3q" title="MP3 bitrate (CBR)" style="display:none">
         <option value="128">128kbps</option>
         <option value="160">160kbps</option>
         <option value="192">192kbps</option>
         <option value="256">256kbps</option>
         <option value="320" selected>320kbps</option>
       </select>
-      <button class="tbtn" data-a="export" title="WAVを書き出し">Export WAV</button>
+      <button class="tbtn" data-a="export" title="Export audio">Export WAV</button>
     </div>`;
   desktop.appendChild(el);
   emptyEl.style.display = 'none';
@@ -446,15 +451,15 @@ function createWindow(name, sampleRate, channels, x, y){
     selS: -1, selE: -1,
     cursor: 0, markers: [], vzoom: 1,
     viewStart: 0, spp: 1,          // samples per pixel
-    playing: false, src: null, playT0: 0, playS0: 0, playEnd: 0, playOff: 0, loop: false,
-    undo: [],
+    playing: false, src: null, playT0: 0, playS0: 0, playEnd: 0, playOff: 0, loop: false, seam: null,
+    undo: [], redo: [],
     wave: el.querySelector('canvas.wave'),
     over: el.querySelector('canvas.overview'),
   };
   wins.set(id, w);
   const fnEl = el.querySelector('.fname');
   fnEl.textContent = name;
-  fnEl.title = 'クリックでファイル名をコピー';
+  fnEl.title = 'Click to copy file name';
   updateMeta(w);
   fitView(w);
   bindWindow(w);
@@ -482,6 +487,7 @@ function setActive(w){
   activeWin = w;
   w.el.classList.add('active');
   w.el.style.zIndex = ++zTop;
+  document.title = w.name + ' — CARVE';
 }
 
 function closeWindow(w){
@@ -489,7 +495,15 @@ function closeWindow(w){
   w.el.remove();
   wins.delete(w.id);
   if(activeWin===w) activeWin = null;
-  if(wins.size===0) emptyEl.style.display = 'flex';
+  if(wins.size===0){
+    emptyEl.style.display = 'flex';
+    document.title = 'CARVE — Wave Editor';
+  }else if(!activeWin){
+    // hand focus (and the tab title) to the topmost remaining window
+    let top=null;
+    wins.forEach(x=>{ if(!top || +x.el.style.zIndex > +top.el.style.zIndex) top=x; });
+    if(top) setActive(top);
+  }
 }
 
 /* ---------- canvas sizing / rendering ---------- */
@@ -516,6 +530,19 @@ function fitView(w){
   w.viewStart = 0;
 }
 function pxToSample(w, px){ return clamp(Math.round(w.viewStart + px*w.spp), 0, w.length); }
+function snapZeroCross(w, s){
+  // nearest zero crossing on ch0 within ±50ms (max 8192 smp); returns s if none found
+  const ch = w.channels[0];
+  s = clamp(Math.round(s), 0, w.length);
+  const maxD = Math.min(Math.round(w.sampleRate*0.05), 8192);
+  const isX = i => i>0 && i<w.length && ((ch[i-1]<=0 && ch[i]>=0) || (ch[i-1]>=0 && ch[i]<=0));
+  if(isX(s) || s===0 || s===w.length) return s;
+  for(let d=1; d<=maxD; d++){
+    if(isX(s+d)) return s+d;
+    if(isX(s-d)) return s-d;
+  }
+  return s;
+}
 function sampleToPx(w, s){ return (s - w.viewStart)/w.spp; }
 
 function columnMinMax(w, ci, s0, s1){
@@ -637,9 +664,15 @@ function render(w){
   // playhead
   if(w.playing){
     const elapsed = (ac().currentTime - w.playT0)*w.sampleRate;
-    const span = Math.max(1, w.playEnd - w.playS0);
-    const off = w.playOff||0;
-    const s = w.loop ? w.playS0 + ((off + elapsed) % span) : Math.min(w.playEnd, w.playS0 + off + elapsed);
+    let s;
+    if(w.seam){
+      const p = Math.min(elapsed, w.seam.total);
+      s = p < w.seam.pre ? w.seam.tailS + p : w.seam.headS + (p - w.seam.pre);
+    }else{
+      const span = Math.max(1, w.playEnd - w.playS0);
+      const off = w.playOff||0;
+      s = w.loop ? w.playS0 + ((off + elapsed) % span) : Math.min(w.playEnd, w.playS0 + off + elapsed);
+    }
     const px = sampleToPx(w, s);
     if(px>=0 && px<=W){
       g.strokeStyle = 'var(--playhead)'; g.strokeStyle = '#ffe8c2'; g.lineWidth = 1.4;
@@ -654,6 +687,7 @@ function render(w){
     : '—';
   w.el.querySelector('.st-sel').textContent = sel;
   w.el.querySelector('[data-a="undo"]').disabled = w.undo.length===0;
+  w.el.querySelector('[data-a="redo"]').disabled = w.redo.length===0;
 }
 
 function renderOverview(w){
@@ -697,10 +731,22 @@ function pushUndo(w, s, e, label){
   const snap = { type:'range', s, e, label, data: w.channels.map(ch=>ch.slice(s,e)) };
   w.undo.push(snap);
   if(w.undo.length>8) w.undo.shift();
+  w.redo.length = 0;
 }
 function doUndo(w){
   const snap = w.undo.pop();
   if(!snap) return;
+  // capture inverse for redo
+  if(snap.type==='paste'){
+    snap.data = w.channels.map(ch=>ch.slice(snap.s, snap.s+snap.n));  // pasted material, for redo
+    w.redo.push(snap);
+  }else if(snap.type==='del'){
+    w.redo.push(snap);                                                // removed data already inside
+  }else{
+    w.redo.push({ type:'range', s:snap.s, e:snap.e, label:snap.label,
+                  data: w.channels.map(ch=>ch.slice(snap.s, snap.e)) });
+  }
+  if(w.redo.length>8) w.redo.shift();
   if(snap.type==='del'){
     const n = snap.removed[0].length;
     w.channels = w.channels.map((ch,ci)=>{
@@ -733,18 +779,65 @@ function doUndo(w){
     refreshPeaks(w, snap.s, snap.e);
   }
   updateMeta(w); render(w);
-  toast(`取り消し: ${snap.label}`);
+  toast(`Undo: ${snap.label}`);
+}
+function doRedo(w){
+  const snap = w.redo.pop();
+  if(!snap) return;
+  stopPlay(w);
+  if(snap.type==='del'){
+    // delete [s, s+n) again
+    const n = snap.removed[0].length, s = snap.s;
+    w.undo.push(snap); if(w.undo.length>8) w.undo.shift();
+    w.channels = w.channels.map(ch=>{
+      const out = new Float32Array(ch.length - n);
+      out.set(ch.subarray(0,s), 0);
+      out.set(ch.subarray(s+n), s);
+      return out;
+    });
+    w.length -= n;
+    w.peaks = buildPeaks(w.channels);
+    w.markers = w.markers.filter(m=>m<s || m>=s+n).map(m=>m>=s+n ? m-n : m);
+    w.selS=-1; w.selE=-1;
+    w.cursor = clamp(s, 0, w.length);
+    clampView(w);
+  }else if(snap.type==='paste'){
+    // re-insert the pasted material at s
+    const {s,n,data} = snap;
+    w.undo.push(snap); if(w.undo.length>8) w.undo.shift();
+    w.channels = w.channels.map((ch,ci)=>{
+      const out = new Float32Array(ch.length + n);
+      out.set(ch.subarray(0,s), 0);
+      out.set(data[ci], s);
+      out.set(ch.subarray(s), s+n);
+      return out;
+    });
+    w.length += n;
+    w.peaks = buildPeaks(w.channels);
+    w.markers = w.markers.map(m=> m>=s ? m+n : m);
+    w.selS = s; w.selE = s+n; w.cursor = s+n;
+    clampView(w);
+  }else{
+    // range: swap current content back to undo, restore redo data
+    w.undo.push({ type:'range', s:snap.s, e:snap.e, label:snap.label,
+                  data: w.channels.map(ch=>ch.slice(snap.s, snap.e)) });
+    if(w.undo.length>8) w.undo.shift();
+    w.channels.forEach((ch,ci)=>ch.set(snap.data[ci], snap.s));
+    refreshPeaks(w, snap.s, snap.e);
+  }
+  updateMeta(w); render(w);
+  toast(`Redo: ${snap.label}`);
 }
 function selRange(w, wholeIfNone=true){
   if(w.selS>=0 && w.selE>w.selS) return [w.selS,w.selE,true];
   return wholeIfNone ? [0,w.length,false] : null;
 }
 const FADE_CURVES = {
-  lin: { f: t=>t,                              label: '直線' },
-  log: { f: t=>Math.sin(t*Math.PI/2),          label: 'なだらか・早' },   // 立ち上がり速く後で緩む
-  exp: { f: t=>1-Math.cos(t*Math.PI/2),        label: 'なだらか・遅' },   // ゆっくり立ち上がる
-  s1:  { f: t=>t*t*(3-2*t),                    label: 'S字' },            // smoothstep
-  s2:  { f: t=>t*t*t*(t*(t*6-15)+10),          label: 'S字・急' },        // smootherstep
+  lin: { f: t=>t,                              label: 'Linear' },
+  log: { f: t=>Math.sin(t*Math.PI/2),          label: 'Smooth · fast' },   // rises fast, eases later
+  exp: { f: t=>1-Math.cos(t*Math.PI/2),        label: 'Smooth · slow' },   // rises slowly
+  s1:  { f: t=>t*t*(3-2*t),                    label: 'S-curve' },            // smoothstep
+  s2:  { f: t=>t*t*t*(t*(t*6-15)+10),          label: 'S-curve · steep' },        // smootherstep
 };
 function opFade(w, dirIn){
   const [s,e,hadSel] = selRange(w);
@@ -760,28 +853,28 @@ function opFade(w, dirIn){
     }
   });
   refreshPeaks(w,s,e); updateMeta(w); render(w);
-  toast(`${dirIn?'フェードイン':'フェードアウト'}（${curve.label}）${hadSel?'（選択範囲）':'（全体）'}`);
+  toast(`${dirIn?'Fade in':'Fade out'} (${curve.label}) ${hadSel?'(selection)':'(whole file)'}`);
 }
 function opNormalize(w, targetDb){
   const [s,e,hadSel] = selRange(w);
   let pk=0;
   w.channels.forEach(ch=>{ for(let i=s;i<e;i++){ const a=Math.abs(ch[i]); if(a>pk)pk=a; }});
-  if(pk<1e-9){ toast('無音のためノーマライズできません'); return; }
+  if(pk<1e-9){ toast('Silent audio — nothing to normalize'); return; }
   const target = Math.pow(10, targetDb/20);
   const f = target/pk;
   pushUndo(w,s,e,'Normalize');
   w.channels.forEach(ch=>{ for(let i=s;i<e;i++) ch[i]*=f; });
   refreshPeaks(w,s,e); updateMeta(w); render(w);
-  toast(`ノーマライズ → ${targetDb.toFixed(1)}dBFS（×${f.toFixed(3)}）${hadSel?'（選択範囲）':'（全体）'}`);
+  toast(`Normalize → ${targetDb.toFixed(1)}dBFS (×${f.toFixed(3)}) ${hadSel?'(selection)':'(whole file)'}`);
 }
 
 /* ---------- normalize target popover ---------- */
 const normPop = document.createElement('div');
 normPop.id = 'normPop';
 normPop.innerHTML = `
-  <div class="row">ピークを
+  <div class="row">Peak to
     <input type="number" id="normDb" step="0.1" min="-60" max="0" value="-0.3">
-    dBFS に
+    dBFS
   </div>
   <div class="row presets">
     <button data-db="0">0.0</button>
@@ -824,22 +917,92 @@ function showNormPop(w, btn){
   normDbInput.focus(); normDbInput.select();
 }
 function hideNormPop(){ normPop.style.display='none'; normTarget=null; }
+
+/* ---------- gain popover ---------- */
+const gainPop = document.createElement('div');
+gainPop.id = 'gainPop';
+gainPop.innerHTML = `
+  <div class="row">Gain
+    <input type="number" id="gainDb" step="0.1" min="-60" max="24" value="-3">
+    dB
+  </div>
+  <div class="row presets">
+    <button data-db="6">+6</button>
+    <button data-db="3">+3</button>
+    <button data-db="1">+1</button>
+    <button data-db="-1">-1</button>
+    <button data-db="-3">-3</button>
+    <button data-db="-6">-6</button>
+  </div>
+  <div class="row"><button id="gainApply" class="apply">Apply Gain</button></div>`;
+document.body.appendChild(gainPop);
+let gainTarget = null;
+let lastGainDb = -3;
+const gainDbInput = gainPop.querySelector('#gainDb');
+gainPop.addEventListener('click', ev=>{
+  const p = ev.target.closest('[data-db]');
+  if(p){ gainDbInput.value = p.dataset.db; gainDbInput.focus(); return; }
+  if(ev.target.id==='gainApply') applyGain();
+});
+gainDbInput.addEventListener('keydown', ev=>{
+  if(ev.key==='Enter') applyGain();
+  if(ev.key==='Escape') hideGainPop();
+  ev.stopPropagation();
+});
+function applyGain(){
+  let db = parseFloat(gainDbInput.value);
+  if(!isFinite(db)) db = 0;
+  db = clamp(db, -60, 24);
+  lastGainDb = db;
+  const w = gainTarget;
+  hideGainPop();
+  if(w && db!==0) opGain(w, db);
+}
+function showGainPop(w, btn){
+  gainTarget = w;
+  gainDbInput.value = lastGainDb;
+  gainPop.style.display = 'block';
+  const r = btn.getBoundingClientRect();
+  gainPop.style.left = clamp(r.left, 8, window.innerWidth - gainPop.offsetWidth - 8) + 'px';
+  gainPop.style.top  = Math.min(r.bottom + 6, window.innerHeight - gainPop.offsetHeight - 8) + 'px';
+  gainDbInput.focus(); gainDbInput.select();
+}
+function hideGainPop(){ gainPop.style.display='none'; gainTarget=null; }
+function opGain(w, db){
+  const r = selRange(w);
+  const [s,e] = r;
+  const hadSel = w.selS>=0 && w.selE>w.selS;
+  const f = Math.pow(10, db/20);
+  pushUndo(w, s, e, 'Gain');
+  let pk = 0;
+  w.channels.forEach(ch=>{
+    for(let i=s;i<e;i++){ ch[i]*=f; const a=Math.abs(ch[i]); if(a>pk) pk=a; }
+  });
+  refreshPeaks(w, s, e);
+  updateMeta(w); render(w);
+  const clip = pk>1 ? ` — ⚠ clipping (peak ${dB(pk)}dB)` : '';
+  toast(`Gain ${db>=0?'+':''}${db.toFixed(1)}dB (×${f.toFixed(3)}) ${hadSel?'(selection)':'(whole file)'}${clip}`);
+}
 window.addEventListener('pointerdown', ev=>{
   if(normPop.style.display==='block'
      && !ev.target.closest('#normPop')
      && !ev.target.closest('[data-a="norm"]')) hideNormPop();
+  if(gainPop.style.display==='block'
+     && !ev.target.closest('#gainPop')
+     && !ev.target.closest('[data-a="gain"]')) hideGainPop();
 }, true);
 let extractCount = 0;
 function opDelete(w){
   const r = selRange(w,false);
-  if(!r){ toast('先に範囲を選択してください'); return; }
+  if(!r){ toast('Select a range first'); return; }
   const [s,e] = r;
   const n = e - s;
-  if(n >= w.length){ toast('全体は削除できません（ファイルが空になります）'); return; }
+  if(n >= w.length){ toast('Cannot delete everything (the file would be empty)'); return; }
   stopPlay(w);
   const snap = { type:'del', s, label:'Delete',
     removed: w.channels.map(ch=>ch.slice(s,e)), markers: w.markers.slice() };
   w.undo.push(snap); if(w.undo.length>8) w.undo.shift();
+  w.redo.length = 0;
   w.channels = w.channels.map(ch=>{
     const out = new Float32Array(ch.length - n);
     out.set(ch.subarray(0,s), 0);
@@ -852,18 +1015,18 @@ function opDelete(w){
   w.selS=-1; w.selE=-1;
   w.cursor = clamp(s, 0, w.length);
   clampView(w); updateMeta(w); render(w);
-  toast(`削除: ${fmtTime(n,w.sampleRate)}`);
+  toast(`Deleted: ${fmtTime(n,w.sampleRate)}`);
 }
 
 function opExtract(w, x, y){
   const r = selRange(w,false);
-  if(!r){ toast('先に範囲を選択してください'); return; }
+  if(!r){ toast('Select a range first'); return; }
   const [s,e] = r;
   extractCount++;
   const base = w.name.replace(/\.[^.]+$/,'');
   const nw = createWindow(`${base}_take${extractCount}.wav`, w.sampleRate,
     w.channels.map(ch=>ch.slice(s,e)), x, y);
-  toast(`新規ファイル作成: ${nw.name}（${fmtTime(e-s,w.sampleRate)}）`);
+  toast(`New file: ${nw.name} (${fmtTime(e-s,w.sampleRate)})`);
   return nw;
 }
 
@@ -882,11 +1045,11 @@ function refreshPasteButtons(){
 }
 function opCopy(w){
   const r = selRange(w,false);
-  if(!r){ toast('先に範囲を選択してください'); return; }
+  if(!r){ toast('Select a range first'); return; }
   const [s,e] = r;
   clipboard = { sampleRate: w.sampleRate, channels: w.channels.map(ch=>ch.slice(s,e)) };
   refreshPasteButtons();
-  toast(`コピー: ${fmtTime(e-s,w.sampleRate)}（${clipboard.channels.length}ch）`);
+  toast(`Copied: ${fmtTime(e-s,w.sampleRate)} (${clipboard.channels.length}ch)`);
 }
 function fitChannels(srcChans, targetN){
   // reconcile clipboard channel count to target window channel count
@@ -904,13 +1067,14 @@ function fitChannels(srcChans, targetN){
   return out;
 }
 function opPaste(w){
-  if(!clipboard){ toast('クリップボードが空です'); return; }
+  if(!clipboard){ toast('Clipboard is empty'); return; }
   stopPlay(w);
   const ins = fitChannels(clipboard.channels, w.channels.length);
   const n = ins[0].length;
   const at = clamp(Math.round(w.cursor), 0, w.length);
   const snap = { type:'paste', s:at, n, label:'Paste', markers: w.markers.slice() };
   w.undo.push(snap); if(w.undo.length>8) w.undo.shift();
+  w.redo.length = 0;
   w.channels = w.channels.map((ch,ci)=>{
     const out = new Float32Array(ch.length + n);
     out.set(ch.subarray(0,at), 0);
@@ -925,15 +1089,65 @@ function opPaste(w){
   w.selS = at; w.selE = at + n;
   w.cursor = at + n;
   clampView(w); updateMeta(w); render(w);
-  const note = clipboard.sampleRate!==w.sampleRate ? `（注: SR ${clipboard.sampleRate}→${w.sampleRate} 未変換）` : '';
-  toast(`ペースト: ${fmtTime(n,w.sampleRate)} @ ${fmtTime(at,w.sampleRate)}${note}`);
+  const note = clipboard.sampleRate!==w.sampleRate ? ` (note: SR ${clipboard.sampleRate}→${w.sampleRate} not converted)` : '';
+  toast(`Pasted: ${fmtTime(n,w.sampleRate)} @ ${fmtTime(at,w.sampleRate)}${note}`);
 }
 
 /* ---------- playback ---------- */
 function stopPlay(w){
   if(w.src){ try{w.src.stop();}catch(e){} w.src=null; }
   w.playing=false;
+  w.seam=null;
   w.el.querySelector('[data-a="play"]').textContent='▶';
+}
+function playFromStart(w){
+  stopPlay(w);
+  const ctx = ac();
+  if(ctx.state==='suspended') ctx.resume();
+  const e = w.length;
+  if(e<1) return;
+  const buf = ctx.createBuffer(w.channels.length, e, w.sampleRate);
+  w.channels.forEach((ch,ci)=>buf.getChannelData(ci).set(ch));
+  const src = ctx.createBufferSource();
+  src.buffer = buf; src.connect(ctx.destination);
+  src.onended = ()=>{ if(w.src===src){ stopPlay(w); render(w); } };
+  src.start();
+  w.src=src; w.playing=true; w.loop=false;
+  w.playT0=ctx.currentTime; w.playS0=0; w.playEnd=e; w.playOff=0;
+  w.el.querySelector('[data-a="play"]').textContent='■';
+  (function loop(){
+    if(!w.playing) return;
+    render(w);
+    requestAnimationFrame(loop);
+  })();
+}
+function playSeam(w){
+  if(w.playing){ stopPlay(w); render(w); return; }
+  const ctx = ac();
+  if(ctx.state==='suspended') ctx.resume();
+  let s=0, e=w.length;
+  if(w.selS>=0 && w.selE>w.selS){ s=w.selS; e=w.selE; }
+  const pre = Math.min(Math.round(w.sampleRate*1.0), Math.floor((e-s)/2));
+  if(pre<16){ toast('Range too short for a seam check'); return; }
+  const buf = ctx.createBuffer(w.channels.length, pre*2, w.sampleRate);
+  w.channels.forEach((ch,ci)=>{
+    const d = buf.getChannelData(ci);
+    d.set(ch.subarray(e-pre, e), 0);   // tail: up to the loop end
+    d.set(ch.subarray(s, s+pre), pre); // head: from the loop start
+  });
+  const src = ctx.createBufferSource();
+  src.buffer = buf; src.connect(ctx.destination);
+  src.onended = ()=>{ if(w.src===src){ stopPlay(w); render(w); } };
+  src.start();
+  w.src=src; w.playing=true; w.loop=false;
+  w.playT0=ctx.currentTime; w.playS0=e-pre; w.playEnd=e; w.playOff=0;
+  w.seam = { tailS: e-pre, headS: s, pre, total: pre*2 };
+  w.el.querySelector('[data-a="play"]').textContent='■';
+  (function loop(){
+    if(!w.playing) return;
+    render(w);
+    requestAnimationFrame(loop);
+  })();
 }
 function togglePlay(w){
   if(w.playing){ stopPlay(w); render(w); return; }
@@ -942,7 +1156,7 @@ function togglePlay(w){
   let s=0, e=w.length, loop=false, startAt=0;
   if(w.selS>=0 && w.selE>w.selS){
     s=w.selS; e=w.selE; loop=true;
-    // ロケーターが選択範囲内にあればそこから、範囲外なら範囲頭から
+    // start from the locator if it sits inside the selection, else from the selection start
     const cur = clamp(Math.round(w.cursor), s, e);
     startAt = (cur>s && cur<e) ? cur - s : 0;
   }
@@ -1020,13 +1234,13 @@ function getOggEncoder(){
   return oggEncP;
 }
 async function exportOgg(w, quality){
-  if(oggBusy){ toast('別のOGG書き出しが進行中です'); return; }
+  if(oggBusy){ toast('Another OGG export is in progress'); return; }
   oggBusy = true;
   try{
-    toast('OGGエンコーダ準備中…');
+    toast('Preparing OGG encoder…');
     let enc;
     try{ enc = await getOggEncoder(); }
-    catch(e){ toast('エンコーダの読み込みに失敗（ネット接続を確認）。WAVで書き出してください'); return; }
+    catch(e){ toast('Failed to load the encoder (check your connection) — export as WAV instead'); return; }
     enc.configure({ channels: w.channels.length, sampleRate: w.sampleRate, vbrQuality: quality });
     const parts = [];
     const CHUNK = 131072;
@@ -1034,21 +1248,162 @@ async function exportOgg(w, quality){
       const e = Math.min(w.length, s+CHUNK);
       parts.push(enc.encode(w.channels.map(ch=>ch.subarray(s,e))).slice());
       if(s % (CHUNK*8) === 0){
-        toast(`OGGエンコード中… ${Math.round(s/w.length*100)}%`);
+        toast(`Encoding OGG… ${Math.round(s/w.length*100)}%`);
         await new Promise(r=>setTimeout(r));
       }
     }
     parts.push(enc.finalize().slice());
-    const blob = new Blob(parts, {type:'audio/ogg'});
+    let total=0; parts.forEach(p=>total+=p.length);
+    let bytes = new Uint8Array(total), o=0;
+    parts.forEach(p=>{ bytes.set(p,o); o+=p.length; });
+    let loopNote = '';
+    if(w.markers.length>=2){
+      const m = w.markers.slice().sort((a,b)=>a-b);
+      const tagged = injectOggLoopTags(bytes, m[0], m[1]-m[0]);
+      if(tagged){ bytes = tagged; loopNote = `, LOOPSTART=${m[0]} LOOPLENGTH=${m[1]-m[0]}`; }
+      else toast('Could not embed loop tags (unexpected OGG structure) — exported without them');
+    }
+    const blob = new Blob([bytes], {type:'audio/ogg'});
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
     a.download = w.name.replace(/\.[^.]+$/,'') + '.ogg';
     a.click();
     setTimeout(()=>URL.revokeObjectURL(a.href),4000);
-    toast(`書き出し: ${a.download} (Vorbis VBR q${quality}, ${(blob.size/1024).toFixed(0)}KB)`);
+    toast(`Exported: ${a.download} (Vorbis VBR q${quality}, ${(blob.size/1024).toFixed(0)}KB${loopNote})`);
   } finally {
     oggBusy = false;
   }
+}
+
+/* ---------- OGG loop tags (LOOPSTART / LOOPLENGTH in the Vorbis comment) ---------- */
+// Ogg page CRC: CRC-32, poly 0x04C11DB7, init 0, no reflection, no final xor
+const OGG_CRC_TABLE = (()=>{
+  const t = new Uint32Array(256);
+  for(let i=0;i<256;i++){
+    let r = i<<24;
+    for(let j=0;j<8;j++) r = (r & 0x80000000) ? ((r<<1) ^ 0x04C11DB7) : (r<<1);
+    t[i] = r>>>0;
+  }
+  return t;
+})();
+function oggCrc32(bytes){
+  let c = 0;
+  for(let i=0;i<bytes.length;i++) c = ((c<<8)>>>0) ^ OGG_CRC_TABLE[((c>>>24) ^ bytes[i]) & 0xff];
+  return c>>>0;
+}
+function laceSegments(len){
+  // packet of `len` bytes → lacing values: n×255 + final <255 (may be 0)
+  const out = [];
+  while(len>=255){ out.push(255); len-=255; }
+  out.push(len);
+  return out;
+}
+// Insert LOOPSTART/LOOPLENGTH into the Vorbis comment header of an Ogg stream.
+// Returns a new Uint8Array, or null if the structure isn't as expected.
+function injectOggLoopTags(bytes, loopStart, loopLength){
+  const te = new TextEncoder();
+  let off = 0;
+  while(off + 27 <= bytes.length){
+    if(!(bytes[off]===0x4f && bytes[off+1]===0x67 && bytes[off+2]===0x67 && bytes[off+3]===0x53)) return null; // "OggS"
+    const headerType = bytes[off+5];
+    const nsegs = bytes[off+26];
+    const segTable = bytes.subarray(off+27, off+27+nsegs);
+    const bodyStart = off+27+nsegs;
+    let bodyLen = 0; for(let i=0;i<nsegs;i++) bodyLen += segTable[i];
+    const pageEnd = bodyStart + bodyLen;
+    const body = bytes.subarray(bodyStart, pageEnd);
+
+    // comment header packet starts "\x03vorbis" and must begin this page (no continuation)
+    if(!(headerType & 1) && bodyLen>7 && body[0]===3 &&
+       body[1]===0x76 && body[2]===0x6f && body[3]===0x72 && body[4]===0x62 && body[5]===0x69 && body[6]===0x73){
+      // length of the first packet on this page (from lacing); bail if it spans pages
+      let pktLen = 0, segUsed = 0, terminated = false;
+      for(let i=0;i<nsegs;i++){
+        pktLen += segTable[i]; segUsed++;
+        if(segTable[i]<255){ terminated = true; break; }
+      }
+      if(!terminated) return null;                       // comment packet continues on next page — unexpected
+      const pkt = body.subarray(0, pktLen);
+      const dv = new DataView(pkt.buffer, pkt.byteOffset, pkt.byteLength);
+      let p = 7;
+      const vendorLen = dv.getUint32(p, true); p += 4 + vendorLen;
+      const count = dv.getUint32(p, true);
+      const countPos = p; p += 4;
+      for(let i=0;i<count;i++){ const l = dv.getUint32(p, true); p += 4 + l; }
+      const framingPos = p;                              // framing byte (must be 1) + anything after
+      if(pkt[framingPos]!==1) return null;
+
+      const addStrs = [`LOOPSTART=${loopStart}`, `LOOPLENGTH=${loopLength}`].map(s=>te.encode(s));
+      const addLen = addStrs.reduce((a,s)=>a+4+s.length, 0);
+      const newPkt = new Uint8Array(pktLen + addLen);
+      newPkt.set(pkt.subarray(0, framingPos), 0);        // header..existing comments
+      const ndv = new DataView(newPkt.buffer);
+      ndv.setUint32(countPos, count + addStrs.length, true);
+      let q = framingPos;
+      for(const s of addStrs){ ndv.setUint32(q, s.length, true); q += 4; newPkt.set(s, q); q += s.length; }
+      newPkt.set(pkt.subarray(framingPos), q);           // framing byte (and any trailing bytes)
+
+      // rebuild the page
+      const restLace = Array.from(segTable.subarray(segUsed));
+      const newLace = [...laceSegments(newPkt.length), ...restLace];
+      if(newLace.length > 255) return null;
+      const restBody = body.subarray(pktLen);
+      const newBodyLen = newPkt.length + restBody.length;
+      const newPage = new Uint8Array(27 + newLace.length + newBodyLen);
+      newPage.set(bytes.subarray(off, off+27), 0);
+      newPage[26] = newLace.length;
+      newPage.set(newLace, 27);
+      newPage.set(newPkt, 27 + newLace.length);
+      newPage.set(restBody, 27 + newLace.length + newPkt.length);
+      // zero CRC field, recompute, write back (little-endian at offset 22)
+      newPage[22]=0; newPage[23]=0; newPage[24]=0; newPage[25]=0;
+      const crc = oggCrc32(newPage);
+      newPage[22]=crc&0xff; newPage[23]=(crc>>>8)&0xff; newPage[24]=(crc>>>16)&0xff; newPage[25]=(crc>>>24)&0xff;
+
+      const out = new Uint8Array(bytes.length - (pageEnd-off) + newPage.length);
+      out.set(bytes.subarray(0, off), 0);
+      out.set(newPage, off);
+      out.set(bytes.subarray(pageEnd), off + newPage.length);
+      return out;
+    }
+    off = pageEnd;
+    if(off > bytes.length) return null;
+  }
+  return null;
+}
+// Read LOOPSTART / LOOPLENGTH (or LOOPEND) from an Ogg Vorbis stream. → {loopStart, loopLength} | null
+function readOggLoopTags(bytes){
+  const td = new TextDecoder();
+  let off = 0, guard = 0;
+  while(off + 27 <= bytes.length && guard++ < 16){       // headers live in the first few pages
+    if(!(bytes[off]===0x4f && bytes[off+1]===0x67 && bytes[off+2]===0x67 && bytes[off+3]===0x53)) return null;
+    const nsegs = bytes[off+26];
+    const segTable = bytes.subarray(off+27, off+27+nsegs);
+    const bodyStart = off+27+nsegs;
+    let bodyLen = 0; for(let i=0;i<nsegs;i++) bodyLen += segTable[i];
+    const body = bytes.subarray(bodyStart, bodyStart+bodyLen);
+    if(bodyLen>7 && body[0]===3 && td.decode(body.subarray(1,7))==='vorbis'){
+      const dv = new DataView(body.buffer, body.byteOffset, body.byteLength);
+      let p = 7;
+      const vendorLen = dv.getUint32(p, true); p += 4 + vendorLen;
+      const count = dv.getUint32(p, true); p += 4;
+      let ls = null, ll = null, le = null;
+      for(let i=0;i<count && p+4<=bodyLen;i++){
+        const l = dv.getUint32(p, true); p += 4;
+        const s = td.decode(body.subarray(p, p+l)); p += l;
+        const eq = s.indexOf('='); if(eq<0) continue;
+        const k = s.slice(0,eq).toUpperCase(), v = parseInt(s.slice(eq+1),10);
+        if(!isFinite(v)) continue;
+        if(k==='LOOPSTART') ls = v;
+        else if(k==='LOOPLENGTH') ll = v;
+        else if(k==='LOOPEND') le = v;
+      }
+      if(ls!==null && ll===null && le!==null) ll = le - ls;
+      return (ls!==null && ll!==null && ll>0) ? {loopStart:ls, loopLength:ll} : null;
+    }
+    off = bodyStart + bodyLen;
+  }
+  return null;
 }
 
 /* ---------- MP3 export (same WASM lib, LAME CBR) ---------- */
@@ -1067,15 +1422,15 @@ function getMp3Encoder(){
   return mp3EncP;
 }
 async function exportMp3(w, kbps){
-  if(mp3Busy){ toast('別のMP3書き出しが進行中です'); return; }
+  if(mp3Busy){ toast('Another MP3 export is in progress'); return; }
   // LAME supports mono/stereo only
-  if(w.channels.length>2){ toast('MP3は1〜2chのみ対応です'); return; }
+  if(w.channels.length>2){ toast('MP3 supports 1–2 channels only'); return; }
   mp3Busy = true;
   try{
-    toast('MP3エンコーダ準備中…');
+    toast('Preparing MP3 encoder…');
     let enc;
     try{ enc = await getMp3Encoder(); }
-    catch(e){ toast('エンコーダの読み込みに失敗（ネット接続を確認）。WAVで書き出してください'); return; }
+    catch(e){ toast('Failed to load the encoder (check your connection) — export as WAV instead'); return; }
     enc.configure({ channels: w.channels.length, sampleRate: w.sampleRate, bitrate: kbps });
     const parts = [];
     const CHUNK = 131072;
@@ -1083,7 +1438,7 @@ async function exportMp3(w, kbps){
       const e = Math.min(w.length, s+CHUNK);
       parts.push(enc.encode(w.channels.map(ch=>ch.subarray(s,e))).slice());
       if(s % (CHUNK*8) === 0){
-        toast(`MP3エンコード中… ${Math.round(s/w.length*100)}%`);
+        toast(`Encoding MP3… ${Math.round(s/w.length*100)}%`);
         await new Promise(r=>setTimeout(r));
       }
     }
@@ -1094,7 +1449,7 @@ async function exportMp3(w, kbps){
     a.download = w.name.replace(/\.[^.]+$/,'') + '.mp3';
     a.click();
     setTimeout(()=>URL.revokeObjectURL(a.href),4000);
-    toast(`書き出し: ${a.download} (MP3 CBR ${kbps}kbps, ${(blob.size/1024).toFixed(0)}KB)`);
+    toast(`Exported: ${a.download} (MP3 CBR ${kbps}kbps, ${(blob.size/1024).toFixed(0)}KB)`);
   } finally {
     mp3Busy = false;
   }
@@ -1115,7 +1470,7 @@ function opExport(w){
   a.download = w.name.replace(/\.[^.]+$/,'') + '.wav';
   a.click();
   setTimeout(()=>URL.revokeObjectURL(a.href),4000);
-  toast(`書き出し: ${a.download} (${fmt==='32f'?'32-bit float':fmt+'-bit + TPDFディザ'})`);
+  toast(`Exported: ${a.download} (${fmt==='32f'?'32-bit float':fmt+'-bit + TPDF dither'})`);
 }
 
 /* ---------- interaction ---------- */
@@ -1127,6 +1482,8 @@ function bindWindow(w){
   fmtSel.addEventListener('change', ()=>{
     el.querySelector('.oggq').style.display = fmtSel.value==='ogg' ? '' : 'none';
     el.querySelector('.mp3q').style.display = fmtSel.value==='mp3' ? '' : 'none';
+    el.querySelector('[data-a="export"]').textContent =
+      'Export ' + (fmtSel.value==='ogg' ? 'OGG' : fmtSel.value==='mp3' ? 'MP3' : 'WAV');
   });
 
   // title bar drag
@@ -1144,11 +1501,11 @@ function bindWindow(w){
     };
     const up = ()=>{
       window.removeEventListener('pointermove',move); window.removeEventListener('pointerup',up);
-      // ファイル名上でドラッグせずに離したらコピー
+      // released on the file name without dragging → copy it
       if(onFname && !moved){
         const val = w.name;
         if(val){
-          const done=()=>toast(`コピー: ${val}`);
+          const done=()=>toast(`Copied: ${val}`);
           if(navigator.clipboard && navigator.clipboard.writeText){
             navigator.clipboard.writeText(val).then(done).catch(()=>fallbackCopy(val,done));
           } else fallbackCopy(val,done);
@@ -1163,8 +1520,8 @@ function bindWindow(w){
   el.querySelector('.statusbar').addEventListener('click', ev=>{
     const c = ev.target.closest('.copyable'); if(!c) return;
     const val = c.querySelector('b').textContent.trim();
-    if(!val || val==='—'){ toast('コピーする値がありません'); return; }
-    const done = ()=>toast(`コピー: ${val}`);
+    if(!val || val==='—'){ toast('Nothing to copy'); return; }
+    const done = ()=>toast(`Copied: ${val}`);
     if(navigator.clipboard && navigator.clipboard.writeText){
       navigator.clipboard.writeText(val).then(done).catch(()=>fallbackCopy(val,done));
     } else fallbackCopy(val, done);
@@ -1175,6 +1532,7 @@ function bindWindow(w){
     const a = ev.target.closest('[data-a]'); if(!a) return;
     switch(a.dataset.a){
       case 'play': togglePlay(w); break;
+      case 'playstart': playFromStart(w); break;
       case 'zin':  zoomCursor(w, .5); break;
       case 'zout': zoomCursor(w, 2); break;
       case 'zfit': fitView(w); clampView(w); render(w); break;
@@ -1184,11 +1542,15 @@ function bindWindow(w){
       case 'fadein': opFade(w,true); break;
       case 'fadeout': opFade(w,false); break;
       case 'norm': showNormPop(w, a); break;
+      case 'gain': showGainPop(w, a); break;
+      case 'seam': playSeam(w); break;
       case 'extract': opExtract(w); break;
       case 'copy': opCopy(w); break;
       case 'paste': opPaste(w); break;
       case 'del': opDelete(w); break;
+      case 'clearmk': clearMarkers(w); break;
       case 'undo': doUndo(w); break;
+      case 'redo': doRedo(w); break;
       case 'export': opExport(w); break;
     }
   });
@@ -1222,7 +1584,7 @@ function bindWindow(w){
     const hi = hitMarker(ev.offsetX, ev.offsetY);
     if(hi>=0){
       w.markers.splice(hi,1); render(w);
-      toast('マーカー削除'); return;
+      toast('Marker deleted'); return;
     }
     // select between surrounding markers (or file start/end)
     const s = pxToSample(w, ev.offsetX);
@@ -1262,8 +1624,11 @@ function bindWindow(w){
     }
     if(dragState.mode==='select' && dragState.moved){
       const cur = pxToSample(w, ev.offsetX);
-      w.selS = Math.min(dragState.startSample, cur);
-      w.selE = Math.max(dragState.startSample, cur);
+      let a = Math.min(dragState.startSample, cur);
+      let b = Math.max(dragState.startSample, cur);
+      if(!ev.shiftKey){ a = snapZeroCross(w, a); b = snapZeroCross(w, b); } // Shift = raw (no snap)
+      w.selS = Math.min(a, b);
+      w.selE = Math.max(a, b);
       // edge auto-scroll
       if(ev.offsetX<8) { w.viewStart -= w.spp*14; clampView(w); }
       if(ev.offsetX>cssW(wave)-8){ w.viewStart += w.spp*14; clampView(w); }
@@ -1304,7 +1669,7 @@ function bindWindow(w){
   });
 
   function showGhost(w){
-    ghostLabel.textContent = `→ 新規ファイル  ${fmtTime(w.selE-w.selS,w.sampleRate)}`;
+    ghostLabel.textContent = `→ New file  ${fmtTime(w.selE-w.selS,w.sampleRate)}`;
     const g = ghostCanvas.getContext('2d');
     ghostCanvas.width=300; ghostCanvas.height=64;
     g.fillStyle='#f08348';
@@ -1349,13 +1714,28 @@ function bindWindow(w){
 }
 
 /* ---------- markers ---------- */
+function removeNearestMarker(w){
+  if(!w.markers.length){ toast('No markers'); return; }
+  let bi=0, bd=Infinity;
+  w.markers.forEach((m,i)=>{ const d=Math.abs(m-w.cursor); if(d<bd){bd=d;bi=i;} });
+  const m = w.markers.splice(bi,1)[0];
+  render(w);
+  toast(`Marker removed: ${fmtTime(m, w.sampleRate)}`);
+}
+function clearMarkers(w){
+  if(!w.markers.length){ toast('No markers'); return; }
+  const n = w.markers.length;
+  w.markers = [];
+  render(w);
+  toast(`Cleared ${n} marker${n>1?'s':''}`);
+}
 function addMarker(w){
-  if(w.markers.length>=4){ toast('マーカーは4つまでです'); return; }
+  if(w.markers.length>=4){ toast('Up to 4 markers only'); return; }
   const m = clamp(Math.round(w.cursor), 0, w.length);
-  if(w.markers.some(x=>Math.abs(x-m)<2)){ toast('同じ位置にマーカーがあります'); return; }
+  if(w.markers.some(x=>Math.abs(x-m)<2)){ toast('A marker already exists at this position'); return; }
   w.markers.push(m);
   render(w);
-  toast(`マーカー${w.markers.length}: ${fmtTime(m, w.sampleRate)}`);
+  toast(`Marker ${w.markers.length}: ${fmtTime(m, w.sampleRate)}`);
 }
 
 /* ---------- global keys ---------- */
@@ -1364,13 +1744,15 @@ window.addEventListener('keydown', ev=>{
   if(ev.target.tagName==='SELECT'||ev.target.tagName==='INPUT') return;
   const w = activeWin;
   if(ev.code==='Space'){ ev.preventDefault(); togglePlay(w); }
-  if((ev.metaKey||ev.ctrlKey) && ev.key.toLowerCase()==='z'){ ev.preventDefault(); doUndo(w); }
+  if((ev.metaKey||ev.ctrlKey) && ev.key.toLowerCase()==='z'){ ev.preventDefault(); ev.shiftKey ? doRedo(w) : doUndo(w); }
+  if((ev.metaKey||ev.ctrlKey) && ev.key.toLowerCase()==='y'){ ev.preventDefault(); doRedo(w); }
   if((ev.metaKey||ev.ctrlKey) && ev.key.toLowerCase()==='c'){
     if(w.selS>=0 && w.selE>w.selS){ ev.preventDefault(); opCopy(w); }
   }
   if((ev.metaKey||ev.ctrlKey) && ev.key.toLowerCase()==='v'){ ev.preventDefault(); opPaste(w); }
   if(ev.key==='Escape'){ w.selS=-1; w.selE=-1; render(w); }
-  if(ev.code==='KeyM'){ ev.preventDefault(); addMarker(w); }
+  if(ev.code==='KeyM'){ ev.preventDefault(); ev.shiftKey ? removeNearestMarker(w) : addMarker(w); }
+  if(ev.code==='Enter' || ev.code==='NumpadEnter'){ ev.preventDefault(); playFromStart(w); }
   if(ev.code==='Delete' || ev.code==='Backspace'){
     ev.preventDefault();
     if(w.selS>=0 && w.selE>w.selS) opDelete(w);
@@ -1518,6 +1900,10 @@ async function decodeAtRate(arr, sr){
 async function loadFile(file, x, y){
   try{
     const arr = await file.arrayBuffer();
+    // read loop tags now — decodeAudioData may detach the buffer later
+    const h = new Uint8Array(arr, 0, Math.min(4, arr.byteLength));
+    const loopTags = (h[0]===0x4f && h[1]===0x67 && h[2]===0x67 && h[3]===0x53)
+      ? readOggLoopTags(new Uint8Array(arr)) : null;
     let buf, nativeSR = sniffSampleRate(arr);
 
     if(nativeSR){
@@ -1538,13 +1924,22 @@ async function loadFile(file, x, y){
     for(let ci=0;ci<buf.numberOfChannels;ci++){
       channels.push(new Float32Array(buf.getChannelData(ci)));
     }
-    createWindow(file.name, buf.sampleRate, channels, x, y);
+    const w = createWindow(file.name, buf.sampleRate, channels, x, y);
+    if(loopTags){
+      const s = clamp(loopTags.loopStart, 0, w.length);
+      const e = clamp(loopTags.loopStart + loopTags.loopLength, 0, w.length);
+      if(e > s){
+        w.markers = [s, e];
+        render(w);
+        toast(`Loop tags found: LOOPSTART=${s}, LOOPLENGTH=${e-s} → markers 1 & 2`);
+      }
+    }
     if(nativeSR && buf.sampleRate!==nativeSR){
-      toast(`注意: ${file.name} のSRを保持できませんでした（${nativeSR}→${buf.sampleRate}）`);
+      toast(`Warning: could not keep the sample rate of ${file.name} (${nativeSR}→${buf.sampleRate})`);
     }
   }catch(e){
     console.error(e);
-    toast(`読み込み失敗: ${file.name}（非対応フォーマットの可能性）`);
+    toast(`Failed to load: ${file.name} (unsupported format?)`);
   }
 }
 document.getElementById('openBtn').addEventListener('click', ()=>document.getElementById('fileInput').click());
