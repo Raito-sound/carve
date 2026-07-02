@@ -1,27 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CARVE — Free Browser Wave Editor</title>
-<meta name="description" content="A free, browser-based audio wave editor built by game composer Raito. Trim, fade, normalize and export — no install, no upload, no account. Your audio never leaves your device.">
-<meta name="author" content="Raito">
-<link rel="canonical" href="https://carve.raito.studio/">
-
-<!-- Open Graph -->
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="Raito.studio">
-<meta property="og:title" content="CARVE — Free Browser Wave Editor">
-<meta property="og:description" content="A browser-based audio wave editor, built by a game composer. Trim, fade, normalize and export — right in your browser. No install. No upload. No account.">
-<meta property="og:url" content="https://carve.raito.studio/">
-<meta property="og:image" content="https://carve.raito.studio/carve-ogp.png">
-
-<!-- Twitter -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="CARVE — Free Browser Wave Editor">
-<meta name="twitter:description" content="A browser-based audio wave editor, built by a game composer. Trim, fade, normalize and export — right in your browser.">
-<meta name="twitter:image" content="https://carve.raito.studio/carve-ogp.png">
-
+<title>CARVE — Wave Editor</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -52,8 +34,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--ui);font-size:13px
 }
 #logo{display:flex;align-items:baseline;gap:8px}
 #logo .name{font-weight:700;font-size:17px;letter-spacing:.22em;color:var(--amber)}
-#logo .sub{font-size:10px;letter-spacing:.14em;color:var(--dim);text-decoration:none;cursor:pointer}
-#logo a.sub:hover{color:var(--amber)}
+#logo .sub{font-size:10px;letter-spacing:.14em;color:var(--dim)}
 #appbar .spacer{flex:1}
 .btn{
   font-family:var(--ui);font-size:12px;font-weight:600;letter-spacing:.04em;
@@ -108,7 +89,9 @@ body{background:var(--bg);color:var(--text);font-family:var(--ui);font-size:13px
 .titlebar .fname{
   font-weight:600;font-size:12.5px;letter-spacing:.03em;color:var(--amber);
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  border-radius:3px;padding:1px 4px;margin:-1px -2px;
 }
+.titlebar .fname:hover{background:rgba(255,255,255,.06)}
 .titlebar .meta{font-family:var(--mono);font-size:10px;color:var(--dim);white-space:nowrap}
 .titlebar .spacer{flex:1}
 .closebtn{
@@ -145,6 +128,9 @@ canvas.overview{position:absolute;inset:0;width:100%;height:100%;cursor:pointer}
   font-family:var(--mono);font-size:10.5px;color:var(--dim);white-space:nowrap;overflow:hidden;
 }
 .statusbar b{color:var(--text);font-weight:500}
+.statusbar .copyable{cursor:pointer;border-radius:3px;padding:1px 3px;margin:0 -3px}
+.statusbar .copyable:hover{background:#222a33;color:var(--text)}
+.statusbar .copyable:active{background:#2b3540}
 .statusbar .spacer{flex:1}
 .statusbar select{
   font-family:var(--mono);font-size:10.5px;color:var(--text);
@@ -240,9 +226,9 @@ canvas.overview{position:absolute;inset:0;width:100%;height:100%;cursor:pointer}
 <body>
 
 <div id="appbar">
-  <div id="logo"><span class="name">CARVE</span><a class="sub" href="https://raito.studio" target="_blank" rel="noopener">WAVE EDITOR · RAITO.STUDIO</a></div>
+  <div id="logo"><span class="name">CARVE</span><span class="sub">WAVE EDITOR · LISA RECORDS</span></div>
   <div class="spacer"></div>
-  <span id="hint">Click = playhead (←→ nudge) · M = marker · dbl-click = select between markers · Space = loop selection · ↑↓ vertical zoom</span>
+  <span id="hint">クリック=再生位置（←→微調整）　M=マーカー　Wクリック=マーカー間選択　選択中Space=ループ再生　↑↓縦ズーム</span>
   <button id="aboutBtn">About</button>
   <button class="btn warm" id="openBtn">Open…</button>
   <input type="file" id="fileInput" accept="audio/*,.wav,.aif,.aiff,.flac,.mp3,.ogg,.m4a" multiple hidden>
@@ -251,7 +237,7 @@ canvas.overview{position:absolute;inset:0;width:100%;height:100%;cursor:pointer}
 <div id="desktop">
   <div id="empty">
     <div class="big">DROP AUDIO FILES</div>
-    <div class="small">Drop WAV / AIFF / FLAC / MP3 here, or use Open at top right</div>
+    <div class="small">WAV / AIFF / FLAC / MP3 をここにドロップ、または右上の Open から</div>
   </div>
 </div>
 
@@ -260,18 +246,18 @@ canvas.overview{position:absolute;inset:0;width:100%;height:100%;cursor:pointer}
 
 <div id="modalBack">
   <div id="aboutModal">
-    <button class="close" id="aboutClose" title="Close">×</button>
+    <button class="close" id="aboutClose" title="閉じる">×</button>
     <h2>CARVE</h2>
-    <div class="tag">WAVE EDITOR · RAITO.STUDIO</div>
-    <p>A wave editor that runs entirely in your browser. The audio files you open are processed <strong>only on your own device</strong> — nothing is ever uploaded to or stored on a server. No install, no account.</p>
-    <p><a href="manual.html" target="_blank" rel="noopener">📖 Read the user manual →</a></p>
+    <div class="tag">WAVE EDITOR · LISA RECORDS</div>
+    <p>ブラウザだけで動く波形エディタ。読み込んだ音声ファイルは<strong>あなたの端末の中だけ</strong>で処理され、サーバーへ送信・保存されることは一切ありません。インストール不要、アカウント不要。</p>
 
     <h3>Features</h3>
-    <p>Load WAV / AIFF / FLAC / MP3, range selection, fade in/out (5 curves), normalize, delete or extract a selection to a new file, loop playback, markers, WAV export (16/24-bit with TPDF dither, 32-bit float), and OGG Vorbis export (VBR quality control).</p>
+    <p>WAV / AIFF / FLAC / MP3 の読み込み、範囲選択、フェードイン・アウト（5カーブ）、ノーマライズ、選択範囲の削除・コピー／ペースト（現在位置に割り込み）・新規ファイル抽出、ループ再生、マーカー、ステータスバーの時間表示クリックでコピー、WAV書き出し（16/24-bit + TPDFディザ、32-bit float）、OGG Vorbis書き出し（VBR品質指定）、MP3書き出し（CBRビットレート指定）。</p>
 
     <h3>Credits</h3>
-    <p>Designed &amp; built by <a href="https://raito.studio" target="_blank" rel="noopener">Raito · raito.studio</a></p>
+    <p>Designed &amp; built by <a href="https://lisareco.com" target="_blank" rel="noopener">来兎 / 株式会社リサレコ</a>.</p>
     <p>OGG Vorbis encoding by <a href="https://github.com/arseneyr/wasm-media-encoders" target="_blank" rel="noopener">wasm-media-encoders</a>, which bundles the Xiph.Org <a href="https://xiph.org/vorbis/" target="_blank" rel="noopener">libVorbis</a> codec.</p>
+    <p>MP3 encoding by the same library, which bundles the <a href="https://lame.sourceforge.io/" target="_blank" rel="noopener">LAME</a> MP3 encoder (LGPL).</p>
 
     <h3>Open Source Licenses</h3>
     <p>wasm-media-encoders — MIT License</p>
@@ -293,9 +279,11 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE FOUNDATION OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE.</div>
 
+    <p>読み込んだファイルのサンプルレートは元の値をそのまま保持します（48kHzは48kHzのまま。ブラウザ出力レートへの自動リサンプルはしません）。WAV / AIFF / FLAC / MP3 はヘッダから正確なレートを読み取ります。</p>
+
     <h3>Disclaimer</h3>
-    <p>This tool is provided as-is. The author assumes no responsibility for any results of its use. Always keep a backup of important source audio before editing.</p>
-    <p style="color:#6e7a86;font-size:11px;margin-top:14px">© 2026 Raito.studio</p>
+    <p>本ツールは現状有姿で提供されます。処理結果について作者は責任を負いません。重要な音源は必ずバックアップの上ご利用ください。</p>
+    <p style="color:#6e7a86;font-size:11px;margin-top:14px">Version 2026.06.25c　·　© 2026 株式会社リサレコ (Lisa Records)</p>
   </div>
 </div>
 
@@ -331,6 +319,16 @@ function fmtTime(samples, sr){
   const t = samples / sr;
   const m = Math.floor(t/60), s = Math.floor(t%60), ms = Math.floor((t%1)*1000);
   return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}.${String(ms).padStart(3,'0')}`;
+}
+function fallbackCopy(text, done){
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.cssText = 'position:fixed;left:-9999px;top:0';
+  document.body.appendChild(ta);
+  ta.focus(); ta.select();
+  try{ document.execCommand('copy'); if(done) done(); }
+  catch(e){ toast('コピーに失敗しました'); }
+  document.body.removeChild(ta);
 }
 const clamp = (v,a,b)=>Math.max(a,Math.min(b,v));
 const dB = v => v<=0 ? '-inf' : (20*Math.log10(v)).toFixed(2);
@@ -376,57 +374,67 @@ function createWindow(name, sampleRate, channels, x, y){
       <span class="fname"></span>
       <span class="meta"></span>
       <span class="spacer"></span>
-      <button class="closebtn" title="Close">×</button>
+      <button class="closebtn" title="閉じる">×</button>
     </div>
     <div class="toolbar">
-      <button class="tbtn play" data-a="play" title="Play / Stop (Space)">▶</button>
+      <button class="tbtn play" data-a="play" title="再生 / 停止 (Space)">▶</button>
       <span class="tsep"></span>
-      <button class="tbtn" data-a="zin"  title="Zoom in">＋</button>
-      <button class="tbtn" data-a="zout" title="Zoom out">−</button>
-      <button class="tbtn" data-a="zfit" title="Fit to window">Fit</button>
-      <button class="tbtn" data-a="zsel" title="Zoom to selection">Zoom Sel</button>
-      <button class="tbtn" data-a="vin"  title="Vertical zoom in (↑)">V＋</button>
-      <button class="tbtn" data-a="vout" title="Vertical zoom out (↓)">V−</button>
+      <button class="tbtn" data-a="zin"  title="ズームイン">＋</button>
+      <button class="tbtn" data-a="zout" title="ズームアウト">−</button>
+      <button class="tbtn" data-a="zfit" title="全体表示">Fit</button>
+      <button class="tbtn" data-a="zsel" title="選択範囲にズーム">Zoom Sel</button>
+      <button class="tbtn" data-a="vin"  title="縦ズームイン (↑)">V＋</button>
+      <button class="tbtn" data-a="vout" title="縦ズームアウト (↓)">V−</button>
       <span class="tsep"></span>
-      <select class="fadecurve" title="Fade curve">
-        <option value="lin" selected>Linear</option>
-        <option value="log">Smooth · fast</option>
-        <option value="exp">Smooth · slow</option>
-        <option value="s1">S-curve</option>
-        <option value="s2">S-curve · steep</option>
+      <select class="fadecurve" title="フェードカーブ">
+        <option value="lin" selected>直線</option>
+        <option value="log">なだらか・早</option>
+        <option value="exp">なだらか・遅</option>
+        <option value="s1">S字</option>
+        <option value="s2">S字・急</option>
       </select>
-      <button class="tbtn" data-a="fadein"  title="Fade in selection">Fade In</button>
-      <button class="tbtn" data-a="fadeout" title="Fade out selection">Fade Out</button>
-      <button class="tbtn" data-a="norm" title="Normalize (set target peak in dBFS)">Normalize</button>
+      <button class="tbtn" data-a="fadein"  title="選択範囲をフェードイン">Fade In</button>
+      <button class="tbtn" data-a="fadeout" title="選択範囲をフェードアウト">Fade Out</button>
+      <button class="tbtn" data-a="norm" title="ノーマライズ（目標ピークdBFSを指定）">Normalize</button>
       <span class="tsep"></span>
-      <button class="tbtn" data-a="extract" title="Extract selection to a new file">Extract → New</button>
-      <button class="tbtn" data-a="del" title="Delete selection (Del)">Delete</button>
-      <button class="tbtn" data-a="undo" title="Undo (⌘Z)" disabled>Undo</button>
+      <button class="tbtn" data-a="extract" title="選択範囲を新規ファイルへ">Extract → New</button>
+      <button class="tbtn" data-a="copy" title="選択範囲をコピー (⌘C)">Copy</button>
+      <button class="tbtn" data-a="paste" title="現在位置に割り込みペースト (⌘V)" disabled>Paste</button>
+      <button class="tbtn" data-a="del" title="選択範囲を削除 (Del)">Delete</button>
+      <button class="tbtn" data-a="undo" title="取り消し (⌘Z)" disabled>Undo</button>
     </div>
     <div class="canvaswrap"><canvas class="wave"></canvas></div>
     <div class="overviewwrap"><canvas class="overview"></canvas></div>
     <div class="statusbar">
-      <span>len <b class="st-len"></b></span>
-      <span>sel <b class="st-sel">—</b></span>
-      <span>cur <b class="st-cur">—</b></span>
+      <span class="copyable" data-copy="len" title="クリックでコピー">len <b class="st-len"></b></span>
+      <span class="copyable" data-copy="sel" title="クリックでコピー">sel <b class="st-sel">—</b></span>
+      <span class="copyable" data-copy="cur" title="クリックでコピー">cur <b class="st-cur">—</b></span>
       <span>peak <b class="st-peak"></b> dB</span>
       <span class="spacer"></span>
-      <select class="fmt" title="Export format">
+      <select class="fmt" title="書き出しフォーマット">
         <option value="24" selected>24-bit PCM</option>
         <option value="16">16-bit PCM</option>
         <option value="32f">32-bit float</option>
         <option value="ogg">OGG Vorbis</option>
+        <option value="mp3">MP3</option>
       </select>
-      <select class="oggq" title="OGG quality (VBR) — higher = better quality, larger file" style="display:none">
+      <select class="oggq" title="OGG品質（VBR） 数値が高いほど高音質・大容量" style="display:none">
         <option value="2">q2 ≈96kbps</option>
         <option value="3">q3 ≈112kbps</option>
         <option value="4">q4 ≈128kbps</option>
         <option value="5">q5 ≈160kbps</option>
         <option value="6" selected>q6 ≈192kbps</option>
         <option value="8">q8 ≈256kbps</option>
-        <option value="9.9">q9.9 max</option>
+        <option value="9.9">q9.9 最高</option>
       </select>
-      <button class="tbtn" data-a="export" title="Export audio file">Export WAV</button>
+      <select class="mp3q" title="MP3ビットレート（CBR）" style="display:none">
+        <option value="128">128kbps</option>
+        <option value="160">160kbps</option>
+        <option value="192">192kbps</option>
+        <option value="256">256kbps</option>
+        <option value="320" selected>320kbps</option>
+      </select>
+      <button class="tbtn" data-a="export" title="WAVを書き出し">Export WAV</button>
     </div>`;
   desktop.appendChild(el);
   emptyEl.style.display = 'none';
@@ -438,13 +446,15 @@ function createWindow(name, sampleRate, channels, x, y){
     selS: -1, selE: -1,
     cursor: 0, markers: [], vzoom: 1,
     viewStart: 0, spp: 1,          // samples per pixel
-    playing: false, src: null, playT0: 0, playS0: 0, playEnd: 0, loop: false,
+    playing: false, src: null, playT0: 0, playS0: 0, playEnd: 0, playOff: 0, loop: false,
     undo: [],
     wave: el.querySelector('canvas.wave'),
     over: el.querySelector('canvas.overview'),
   };
   wins.set(id, w);
-  el.querySelector('.fname').textContent = name;
+  const fnEl = el.querySelector('.fname');
+  fnEl.textContent = name;
+  fnEl.title = 'クリックでファイル名をコピー';
   updateMeta(w);
   fitView(w);
   bindWindow(w);
@@ -454,6 +464,7 @@ function createWindow(name, sampleRate, channels, x, y){
   ro.observe(el.querySelector('.overviewwrap'));
   sizeCanvases(w);
   render(w);
+  refreshPasteButtons();
   return w;
 }
 
@@ -627,7 +638,8 @@ function render(w){
   if(w.playing){
     const elapsed = (ac().currentTime - w.playT0)*w.sampleRate;
     const span = Math.max(1, w.playEnd - w.playS0);
-    const s = w.loop ? w.playS0 + (elapsed % span) : Math.min(w.playEnd, w.playS0 + elapsed);
+    const off = w.playOff||0;
+    const s = w.loop ? w.playS0 + ((off + elapsed) % span) : Math.min(w.playEnd, w.playS0 + off + elapsed);
     const px = sampleToPx(w, s);
     if(px>=0 && px<=W){
       g.strokeStyle = 'var(--playhead)'; g.strokeStyle = '#ffe8c2'; g.lineWidth = 1.4;
@@ -702,23 +714,37 @@ function doUndo(w){
     w.peaks = buildPeaks(w.channels);
     w.markers = snap.markers;
     clampView(w);
+  }else if(snap.type==='paste'){
+    const {s,n} = snap;
+    w.channels = w.channels.map(ch=>{
+      const out = new Float32Array(ch.length - n);
+      out.set(ch.subarray(0,s), 0);
+      out.set(ch.subarray(s+n), s);
+      return out;
+    });
+    w.length = w.channels[0].length;
+    w.peaks = buildPeaks(w.channels);
+    w.markers = snap.markers;
+    w.selS=-1; w.selE=-1;
+    w.cursor = clamp(s,0,w.length);
+    clampView(w);
   }else{
     w.channels.forEach((ch,ci)=>ch.set(snap.data[ci], snap.s));
     refreshPeaks(w, snap.s, snap.e);
   }
   updateMeta(w); render(w);
-  toast(`Undo: ${snap.label}`);
+  toast(`取り消し: ${snap.label}`);
 }
 function selRange(w, wholeIfNone=true){
   if(w.selS>=0 && w.selE>w.selS) return [w.selS,w.selE,true];
   return wholeIfNone ? [0,w.length,false] : null;
 }
 const FADE_CURVES = {
-  lin: { f: t=>t,                              label: 'Linear' },
-  log: { f: t=>Math.sin(t*Math.PI/2),          label: 'Smooth · fast' },   // 立ち上がり速く後で緩む
-  exp: { f: t=>1-Math.cos(t*Math.PI/2),        label: 'Smooth · slow' },   // ゆっくり立ち上がる
-  s1:  { f: t=>t*t*(3-2*t),                    label: 'S-curve' },            // smoothstep
-  s2:  { f: t=>t*t*t*(t*(t*6-15)+10),          label: 'S-curve · steep' },        // smootherstep
+  lin: { f: t=>t,                              label: '直線' },
+  log: { f: t=>Math.sin(t*Math.PI/2),          label: 'なだらか・早' },   // 立ち上がり速く後で緩む
+  exp: { f: t=>1-Math.cos(t*Math.PI/2),        label: 'なだらか・遅' },   // ゆっくり立ち上がる
+  s1:  { f: t=>t*t*(3-2*t),                    label: 'S字' },            // smoothstep
+  s2:  { f: t=>t*t*t*(t*(t*6-15)+10),          label: 'S字・急' },        // smootherstep
 };
 function opFade(w, dirIn){
   const [s,e,hadSel] = selRange(w);
@@ -734,28 +760,28 @@ function opFade(w, dirIn){
     }
   });
   refreshPeaks(w,s,e); updateMeta(w); render(w);
-  toast(`${dirIn?'Fade in':'Fade out'} (${curve.label})${hadSel?' · selection':' · whole file'}`);
+  toast(`${dirIn?'フェードイン':'フェードアウト'}（${curve.label}）${hadSel?'（選択範囲）':'（全体）'}`);
 }
 function opNormalize(w, targetDb){
   const [s,e,hadSel] = selRange(w);
   let pk=0;
   w.channels.forEach(ch=>{ for(let i=s;i<e;i++){ const a=Math.abs(ch[i]); if(a>pk)pk=a; }});
-  if(pk<1e-9){ toast('Cannot normalize: selection is silent'); return; }
+  if(pk<1e-9){ toast('無音のためノーマライズできません'); return; }
   const target = Math.pow(10, targetDb/20);
   const f = target/pk;
   pushUndo(w,s,e,'Normalize');
   w.channels.forEach(ch=>{ for(let i=s;i<e;i++) ch[i]*=f; });
   refreshPeaks(w,s,e); updateMeta(w); render(w);
-  toast(`Normalized → ${targetDb.toFixed(1)}dBFS (×${f.toFixed(3)})${hadSel?' · selection':' · whole file'}`);
+  toast(`ノーマライズ → ${targetDb.toFixed(1)}dBFS（×${f.toFixed(3)}）${hadSel?'（選択範囲）':'（全体）'}`);
 }
 
 /* ---------- normalize target popover ---------- */
 const normPop = document.createElement('div');
 normPop.id = 'normPop';
 normPop.innerHTML = `
-  <div class="row">Peak to
+  <div class="row">ピークを
     <input type="number" id="normDb" step="0.1" min="-60" max="0" value="-0.3">
-    dBFS
+    dBFS に
   </div>
   <div class="row presets">
     <button data-db="0">0.0</button>
@@ -806,10 +832,10 @@ window.addEventListener('pointerdown', ev=>{
 let extractCount = 0;
 function opDelete(w){
   const r = selRange(w,false);
-  if(!r){ toast('Select a range first'); return; }
+  if(!r){ toast('先に範囲を選択してください'); return; }
   const [s,e] = r;
   const n = e - s;
-  if(n >= w.length){ toast('Cannot delete the whole file'); return; }
+  if(n >= w.length){ toast('全体は削除できません（ファイルが空になります）'); return; }
   stopPlay(w);
   const snap = { type:'del', s, label:'Delete',
     removed: w.channels.map(ch=>ch.slice(s,e)), markers: w.markers.slice() };
@@ -826,19 +852,81 @@ function opDelete(w){
   w.selS=-1; w.selE=-1;
   w.cursor = clamp(s, 0, w.length);
   clampView(w); updateMeta(w); render(w);
-  toast(`Deleted: ${fmtTime(n,w.sampleRate)}`);
+  toast(`削除: ${fmtTime(n,w.sampleRate)}`);
 }
 
 function opExtract(w, x, y){
   const r = selRange(w,false);
-  if(!r){ toast('Select a range first'); return; }
+  if(!r){ toast('先に範囲を選択してください'); return; }
   const [s,e] = r;
   extractCount++;
   const base = w.name.replace(/\.[^.]+$/,'');
   const nw = createWindow(`${base}_take${extractCount}.wav`, w.sampleRate,
     w.channels.map(ch=>ch.slice(s,e)), x, y);
-  toast(`New file created: ${nw.name} (${fmtTime(e-s,w.sampleRate)})`);
+  toast(`新規ファイル作成: ${nw.name}（${fmtTime(e-s,w.sampleRate)}）`);
   return nw;
+}
+
+/* ---------- copy / paste ----------
+   clipboard = { sampleRate, channels:[Float32Array,...] }
+   Paste inserts at current cursor (split-insert). Channel-count
+   mismatch is reconciled (mono↔stereo). Sample-rate mismatch is
+   flagged but pasted as-is (no resample) to keep behavior predictable. */
+let clipboard = null;
+function refreshPasteButtons(){
+  const on = !!clipboard;
+  wins.forEach(w=>{
+    const b = w.el.querySelector('[data-a="paste"]');
+    if(b) b.disabled = !on;
+  });
+}
+function opCopy(w){
+  const r = selRange(w,false);
+  if(!r){ toast('先に範囲を選択してください'); return; }
+  const [s,e] = r;
+  clipboard = { sampleRate: w.sampleRate, channels: w.channels.map(ch=>ch.slice(s,e)) };
+  refreshPasteButtons();
+  toast(`コピー: ${fmtTime(e-s,w.sampleRate)}（${clipboard.channels.length}ch）`);
+}
+function fitChannels(srcChans, targetN){
+  // reconcile clipboard channel count to target window channel count
+  const srcN = srcChans.length;
+  if(srcN === targetN) return srcChans.map(ch=>ch);
+  if(srcN === 1){ const out=[]; for(let i=0;i<targetN;i++) out.push(srcChans[0]); return out; }
+  if(targetN === 1){
+    const n = srcChans[0].length, mix = new Float32Array(n);
+    for(let i=0;i<n;i++){ let a=0; for(let c=0;c<srcN;c++) a+=srcChans[c][i]; mix[i]=a/srcN; }
+    return [mix];
+  }
+  // general case: take first targetN, pad with first channel
+  const out=[];
+  for(let i=0;i<targetN;i++) out.push(srcChans[i] ?? srcChans[0]);
+  return out;
+}
+function opPaste(w){
+  if(!clipboard){ toast('クリップボードが空です'); return; }
+  stopPlay(w);
+  const ins = fitChannels(clipboard.channels, w.channels.length);
+  const n = ins[0].length;
+  const at = clamp(Math.round(w.cursor), 0, w.length);
+  const snap = { type:'paste', s:at, n, label:'Paste', markers: w.markers.slice() };
+  w.undo.push(snap); if(w.undo.length>8) w.undo.shift();
+  w.channels = w.channels.map((ch,ci)=>{
+    const out = new Float32Array(ch.length + n);
+    out.set(ch.subarray(0,at), 0);
+    out.set(ins[ci], at);
+    out.set(ch.subarray(at), at + n);
+    return out;
+  });
+  w.length += n;
+  w.peaks = buildPeaks(w.channels);
+  // markers after insertion point shift right
+  w.markers = w.markers.map(m=> m>=at ? m+n : m);
+  w.selS = at; w.selE = at + n;
+  w.cursor = at + n;
+  clampView(w); updateMeta(w); render(w);
+  const note = clipboard.sampleRate!==w.sampleRate ? `（注: SR ${clipboard.sampleRate}→${w.sampleRate} 未変換）` : '';
+  toast(`ペースト: ${fmtTime(n,w.sampleRate)} @ ${fmtTime(at,w.sampleRate)}${note}`);
 }
 
 /* ---------- playback ---------- */
@@ -851,10 +939,15 @@ function togglePlay(w){
   if(w.playing){ stopPlay(w); render(w); return; }
   const ctx = ac();
   if(ctx.state==='suspended') ctx.resume();
-  let s=0, e=w.length, loop=false;
-  if(w.selS>=0 && w.selE>w.selS){ s=w.selS; e=w.selE; loop=true; }
+  let s=0, e=w.length, loop=false, startAt=0;
+  if(w.selS>=0 && w.selE>w.selS){
+    s=w.selS; e=w.selE; loop=true;
+    // ロケーターが選択範囲内にあればそこから、範囲外なら範囲頭から
+    const cur = clamp(Math.round(w.cursor), s, e);
+    startAt = (cur>s && cur<e) ? cur - s : 0;
+  }
   else { s = clamp(Math.round(w.cursor), 0, Math.max(0,w.length-1)); }
-  if(e-s < 1){ s=0; e=w.length; loop=false; }
+  if(e-s < 1){ s=0; e=w.length; loop=false; startAt=0; }
   const buf = ctx.createBuffer(w.channels.length, e-s, w.sampleRate);
   w.channels.forEach((ch,ci)=>buf.getChannelData(ci).set(ch.subarray(s,e)));
   const src = ctx.createBufferSource();
@@ -862,8 +955,8 @@ function togglePlay(w){
   src.loop = loop;
   if(loop){ src.loopStart = 0; src.loopEnd = buf.duration; }
   src.onended = ()=>{ if(w.src===src){ stopPlay(w); render(w);} };
-  src.start();
-  w.src=src; w.playing=true; w.loop=loop; w.playT0=ctx.currentTime; w.playS0=s; w.playEnd=e;
+  src.start(0, startAt/w.sampleRate);
+  w.src=src; w.playing=true; w.loop=loop; w.playT0=ctx.currentTime; w.playS0=s; w.playEnd=e; w.playOff=startAt;
   w.el.querySelector('[data-a="play"]').textContent='■';
   (function loop(){
     if(!w.playing) return;
@@ -927,13 +1020,13 @@ function getOggEncoder(){
   return oggEncP;
 }
 async function exportOgg(w, quality){
-  if(oggBusy){ toast('Another OGG export is in progress'); return; }
+  if(oggBusy){ toast('別のOGG書き出しが進行中です'); return; }
   oggBusy = true;
   try{
-    toast('Preparing OGG encoder…');
+    toast('OGGエンコーダ準備中…');
     let enc;
     try{ enc = await getOggEncoder(); }
-    catch(e){ toast('Failed to load encoder (check your connection). Export as WAV instead.'); return; }
+    catch(e){ toast('エンコーダの読み込みに失敗（ネット接続を確認）。WAVで書き出してください'); return; }
     enc.configure({ channels: w.channels.length, sampleRate: w.sampleRate, vbrQuality: quality });
     const parts = [];
     const CHUNK = 131072;
@@ -941,7 +1034,7 @@ async function exportOgg(w, quality){
       const e = Math.min(w.length, s+CHUNK);
       parts.push(enc.encode(w.channels.map(ch=>ch.subarray(s,e))).slice());
       if(s % (CHUNK*8) === 0){
-        toast(`Encoding OGG… ${Math.round(s/w.length*100)}%`);
+        toast(`OGGエンコード中… ${Math.round(s/w.length*100)}%`);
         await new Promise(r=>setTimeout(r));
       }
     }
@@ -952,9 +1045,58 @@ async function exportOgg(w, quality){
     a.download = w.name.replace(/\.[^.]+$/,'') + '.ogg';
     a.click();
     setTimeout(()=>URL.revokeObjectURL(a.href),4000);
-    toast(`Exported: ${a.download} (Vorbis VBR q${quality}, ${(blob.size/1024).toFixed(0)}KB)`);
+    toast(`書き出し: ${a.download} (Vorbis VBR q${quality}, ${(blob.size/1024).toFixed(0)}KB)`);
   } finally {
     oggBusy = false;
+  }
+}
+
+/* ---------- MP3 export (same WASM lib, LAME CBR) ---------- */
+let mp3EncP = null, mp3Busy = false;
+function getMp3Encoder(){
+  if(!mp3EncP){
+    mp3EncP = new Promise((res,rej)=>{
+      if(window.WasmMediaEncoder) return res();
+      const s = document.createElement('script');
+      s.src = OGG_LIB;            // same bundle exposes createMp3Encoder
+      s.onload = ()=>res();
+      s.onerror = ()=>{ mp3EncP=null; rej(new Error('lib load failed')); };
+      document.head.appendChild(s);
+    }).then(()=>window.WasmMediaEncoder.createMp3Encoder());
+  }
+  return mp3EncP;
+}
+async function exportMp3(w, kbps){
+  if(mp3Busy){ toast('別のMP3書き出しが進行中です'); return; }
+  // LAME supports mono/stereo only
+  if(w.channels.length>2){ toast('MP3は1〜2chのみ対応です'); return; }
+  mp3Busy = true;
+  try{
+    toast('MP3エンコーダ準備中…');
+    let enc;
+    try{ enc = await getMp3Encoder(); }
+    catch(e){ toast('エンコーダの読み込みに失敗（ネット接続を確認）。WAVで書き出してください'); return; }
+    enc.configure({ channels: w.channels.length, sampleRate: w.sampleRate, bitrate: kbps });
+    const parts = [];
+    const CHUNK = 131072;
+    for(let s=0; s<w.length; s+=CHUNK){
+      const e = Math.min(w.length, s+CHUNK);
+      parts.push(enc.encode(w.channels.map(ch=>ch.subarray(s,e))).slice());
+      if(s % (CHUNK*8) === 0){
+        toast(`MP3エンコード中… ${Math.round(s/w.length*100)}%`);
+        await new Promise(r=>setTimeout(r));
+      }
+    }
+    parts.push(enc.finalize().slice());
+    const blob = new Blob(parts, {type:'audio/mpeg'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = w.name.replace(/\.[^.]+$/,'') + '.mp3';
+    a.click();
+    setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+    toast(`書き出し: ${a.download} (MP3 CBR ${kbps}kbps, ${(blob.size/1024).toFixed(0)}KB)`);
+  } finally {
+    mp3Busy = false;
   }
 }
 function opExport(w){
@@ -963,13 +1105,17 @@ function opExport(w){
     exportOgg(w, parseFloat(w.el.querySelector('.oggq').value));
     return;
   }
+  if(fmt==='mp3'){
+    exportMp3(w, parseInt(w.el.querySelector('.mp3q').value,10));
+    return;
+  }
   const blob = encodeWav(w,fmt);
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = w.name.replace(/\.[^.]+$/,'') + '.wav';
   a.click();
   setTimeout(()=>URL.revokeObjectURL(a.href),4000);
-  toast(`Exported: ${a.download} (${fmt==='32f'?'32-bit float':fmt+'-bit + TPDF dither'})`);
+  toast(`書き出し: ${a.download} (${fmt==='32f'?'32-bit float':fmt+'-bit + TPDFディザ'})`);
 }
 
 /* ---------- interaction ---------- */
@@ -980,6 +1126,7 @@ function bindWindow(w){
   const fmtSel = el.querySelector('.fmt');
   fmtSel.addEventListener('change', ()=>{
     el.querySelector('.oggq').style.display = fmtSel.value==='ogg' ? '' : 'none';
+    el.querySelector('.mp3q').style.display = fmtSel.value==='mp3' ? '' : 'none';
   });
 
   // title bar drag
@@ -988,13 +1135,39 @@ function bindWindow(w){
     if(ev.target.closest('.closebtn')) return;
     const sx=ev.clientX, sy=ev.clientY;
     const ox=el.offsetLeft, oy=el.offsetTop;
+    const onFname = !!ev.target.closest('.fname');
+    let moved=false;
     const move = e=>{
+      if(Math.abs(e.clientX-sx)>3 || Math.abs(e.clientY-sy)>3) moved=true;
       el.style.left = clamp(ox+e.clientX-sx, -el.offsetWidth+120, desktop.clientWidth-60)+'px';
       el.style.top  = clamp(oy+e.clientY-sy, 0, desktop.clientHeight-40)+'px';
     };
-    const up = ()=>{ window.removeEventListener('pointermove',move); window.removeEventListener('pointerup',up); };
+    const up = ()=>{
+      window.removeEventListener('pointermove',move); window.removeEventListener('pointerup',up);
+      // ファイル名上でドラッグせずに離したらコピー
+      if(onFname && !moved){
+        const val = w.name;
+        if(val){
+          const done=()=>toast(`コピー: ${val}`);
+          if(navigator.clipboard && navigator.clipboard.writeText){
+            navigator.clipboard.writeText(val).then(done).catch(()=>fallbackCopy(val,done));
+          } else fallbackCopy(val,done);
+        }
+      }
+    };
     window.addEventListener('pointermove',move);
     window.addEventListener('pointerup',up);
+  });
+
+  // status bar: click time readout to copy
+  el.querySelector('.statusbar').addEventListener('click', ev=>{
+    const c = ev.target.closest('.copyable'); if(!c) return;
+    const val = c.querySelector('b').textContent.trim();
+    if(!val || val==='—'){ toast('コピーする値がありません'); return; }
+    const done = ()=>toast(`コピー: ${val}`);
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(val).then(done).catch(()=>fallbackCopy(val,done));
+    } else fallbackCopy(val, done);
   });
 
   // toolbar / status actions
@@ -1012,6 +1185,8 @@ function bindWindow(w){
       case 'fadeout': opFade(w,false); break;
       case 'norm': showNormPop(w, a); break;
       case 'extract': opExtract(w); break;
+      case 'copy': opCopy(w); break;
+      case 'paste': opPaste(w); break;
       case 'del': opDelete(w); break;
       case 'undo': doUndo(w); break;
       case 'export': opExport(w); break;
@@ -1047,7 +1222,7 @@ function bindWindow(w){
     const hi = hitMarker(ev.offsetX, ev.offsetY);
     if(hi>=0){
       w.markers.splice(hi,1); render(w);
-      toast('Marker deleted'); return;
+      toast('マーカー削除'); return;
     }
     // select between surrounding markers (or file start/end)
     const s = pxToSample(w, ev.offsetX);
@@ -1129,7 +1304,7 @@ function bindWindow(w){
   });
 
   function showGhost(w){
-    ghostLabel.textContent = `→ New file  ${fmtTime(w.selE-w.selS,w.sampleRate)}`;
+    ghostLabel.textContent = `→ 新規ファイル  ${fmtTime(w.selE-w.selS,w.sampleRate)}`;
     const g = ghostCanvas.getContext('2d');
     ghostCanvas.width=300; ghostCanvas.height=64;
     g.fillStyle='#f08348';
@@ -1175,12 +1350,12 @@ function bindWindow(w){
 
 /* ---------- markers ---------- */
 function addMarker(w){
-  if(w.markers.length>=4){ toast('Up to 4 markers'); return; }
+  if(w.markers.length>=4){ toast('マーカーは4つまでです'); return; }
   const m = clamp(Math.round(w.cursor), 0, w.length);
-  if(w.markers.some(x=>Math.abs(x-m)<2)){ toast('A marker already exists here'); return; }
+  if(w.markers.some(x=>Math.abs(x-m)<2)){ toast('同じ位置にマーカーがあります'); return; }
   w.markers.push(m);
   render(w);
-  toast(`Marker ${w.markers.length}: ${fmtTime(m, w.sampleRate)}`);
+  toast(`マーカー${w.markers.length}: ${fmtTime(m, w.sampleRate)}`);
 }
 
 /* ---------- global keys ---------- */
@@ -1190,6 +1365,10 @@ window.addEventListener('keydown', ev=>{
   const w = activeWin;
   if(ev.code==='Space'){ ev.preventDefault(); togglePlay(w); }
   if((ev.metaKey||ev.ctrlKey) && ev.key.toLowerCase()==='z'){ ev.preventDefault(); doUndo(w); }
+  if((ev.metaKey||ev.ctrlKey) && ev.key.toLowerCase()==='c'){
+    if(w.selS>=0 && w.selE>w.selS){ ev.preventDefault(); opCopy(w); }
+  }
+  if((ev.metaKey||ev.ctrlKey) && ev.key.toLowerCase()==='v'){ ev.preventDefault(); opPaste(w); }
   if(ev.key==='Escape'){ w.selS=-1; w.selE=-1; render(w); }
   if(ev.code==='KeyM'){ ev.preventDefault(); addMarker(w); }
   if(ev.code==='Delete' || ev.code==='Backspace'){
@@ -1215,19 +1394,157 @@ window.addEventListener('keydown', ev=>{
   }
 });
 
-/* ---------- file loading ---------- */
+/* ---------- file loading ----------
+   Key point: AudioContext.decodeAudioData() resamples the decoded buffer to
+   the *context's* output sample rate (often 44.1k on macOS). To preserve the
+   file's native rate (e.g. keep 48k as 48k, never silently downsample to 44.1k),
+   we (1) read the true sample rate from the file header, then (2) decode inside
+   an OfflineAudioContext created at that exact rate — which decodes without
+   resampling. Formats whose header we can't parse fall back to a two-pass decode. */
+
+// Read a 32-bit big-endian uint
+function readU32BE(dv, o){ return dv.getUint32(o, false); }
+// AIFF stores sample rate as an 80-bit IEEE 754 extended float at COMM offset
+function read80BitFloat(dv, o){
+  const sign = (dv.getUint8(o) & 0x80) ? -1 : 1;
+  let exp = ((dv.getUint8(o) & 0x7f) << 8) | dv.getUint8(o+1);
+  const hiMant = dv.getUint32(o+2, false);   // bits 63..32 (incl. explicit integer bit)
+  const loMant = dv.getUint32(o+6, false);   // bits 31..0
+  if(exp===0 && hiMant===0 && loMant===0) return 0;
+  exp -= 16383;
+  // mantissa is 64-bit with explicit leading bit; value = mantissa * 2^(exp-63)
+  const mant = hiMant * 4294967296 + loMant;  // 2^32
+  return sign * mant * Math.pow(2, exp - 63);
+}
+function sniffSampleRate(arr){
+  try{
+    const dv = new DataView(arr);
+    if(arr.byteLength < 16) return null;
+    const tag = String.fromCharCode(dv.getUint8(0),dv.getUint8(1),dv.getUint8(2),dv.getUint8(3));
+    // ----- WAV (RIFF / RF64) -----
+    if(tag==='RIFF' || tag==='RF64'){
+      const form = String.fromCharCode(dv.getUint8(8),dv.getUint8(9),dv.getUint8(10),dv.getUint8(11));
+      if(form!=='WAVE') return null;
+      let o = 12;
+      while(o + 8 <= arr.byteLength){
+        const id = String.fromCharCode(dv.getUint8(o),dv.getUint8(o+1),dv.getUint8(o+2),dv.getUint8(o+3));
+        const size = dv.getUint32(o+4, true);
+        if(id==='fmt '){
+          // fmt: u16 format, u16 channels, u32 sampleRate ...
+          const sr = dv.getUint32(o+12, true);
+          if(sr>=8000 && sr<=384000) return sr;
+          return null;
+        }
+        o += 8 + size + (size & 1);   // chunks are word-aligned
+      }
+      return null;
+    }
+    // ----- AIFF / AIFF-C -----
+    if(tag==='FORM'){
+      const form = String.fromCharCode(dv.getUint8(8),dv.getUint8(9),dv.getUint8(10),dv.getUint8(11));
+      if(form!=='AIFF' && form!=='AIFC') return null;
+      let o = 12;
+      while(o + 8 <= arr.byteLength){
+        const id = String.fromCharCode(dv.getUint8(o),dv.getUint8(o+1),dv.getUint8(o+2),dv.getUint8(o+3));
+        const size = readU32BE(dv, o+4);
+        if(id==='COMM'){
+          // COMM: u16 channels, u32 numFrames, u16 sampleSize, 80-bit float sampleRate@offset+16
+          const sr = Math.round(read80BitFloat(dv, o+16));
+          if(sr>=8000 && sr<=384000) return sr;
+          return null;
+        }
+        o += 8 + size + (size & 1);
+      }
+      return null;
+    }
+    // ----- FLAC -----
+    if(tag==='fLaC'){
+      // STREAMINFO is the first metadata block (type 0), starting at byte 4.
+      // header: 1 byte (last-flag+type) + 3 bytes length, then STREAMINFO body.
+      // sample rate = 20 bits starting at body offset 10.
+      const bodyStart = 8;  // 4 (fLaC) + 4 (block header)
+      if(arr.byteLength < bodyStart + 14) return null;
+      const b10 = dv.getUint8(bodyStart+10);
+      const b11 = dv.getUint8(bodyStart+11);
+      const b12 = dv.getUint8(bodyStart+12);
+      const sr = (b10 << 12) | (b11 << 4) | (b12 >> 4);
+      if(sr>=8000 && sr<=384000) return sr;
+      return null;
+    }
+    // ----- MP3 (incl. ID3v2-prefixed) -----
+    if((dv.getUint8(0)===0x49 && dv.getUint8(1)===0x44 && dv.getUint8(2)===0x33) ||  // 'ID3'
+       (dv.getUint8(0)===0xFF && (dv.getUint8(1)&0xE0)===0xE0)){
+      let p = 0;
+      // skip ID3v2 tag if present
+      if(dv.getUint8(0)===0x49 && dv.getUint8(1)===0x44 && dv.getUint8(2)===0x33){
+        // ID3v2 size is a syncsafe int at bytes 6..9
+        const sz = (dv.getUint8(6)<<21)|(dv.getUint8(7)<<14)|(dv.getUint8(8)<<7)|dv.getUint8(9);
+        p = 10 + sz;
+      }
+      // find the first frame sync 0xFFEx
+      const lim = Math.min(arr.byteLength-4, p+0x40000);
+      for(; p<lim; p++){
+        if(dv.getUint8(p)===0xFF && (dv.getUint8(p+1)&0xE0)===0xE0){
+          const b1 = dv.getUint8(p+1), b2 = dv.getUint8(p+2);
+          const verBits = (b1>>3)&3;   // 3=MPEG1, 2=MPEG2, 0=MPEG2.5
+          const srIndex = (b2>>2)&3;   // 0..2 valid
+          if(srIndex===3) continue;
+          const TBL = {
+            3:[44100,48000,32000],   // MPEG1
+            2:[22050,24000,16000],   // MPEG2
+            0:[11025,12000,8000],    // MPEG2.5
+          };
+          const row = TBL[verBits];
+          if(!row) continue;
+          const sr = row[srIndex];
+          if(sr>=8000 && sr<=384000) return sr;
+        }
+      }
+      return null;
+    }
+    return null;
+  }catch(e){ return null; }
+}
+
+// Decode inside an OfflineAudioContext at the target rate → no resampling.
+async function decodeAtRate(arr, sr){
+  const OAC = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+  if(!OAC) throw new Error('no OfflineAudioContext');
+  // decodeAudioData detaches the ArrayBuffer; pass a copy so the original survives for fallbacks
+  const octx = new OAC(1, 1, sr);
+  return await octx.decodeAudioData(arr.slice(0));
+}
+
 async function loadFile(file, x, y){
   try{
     const arr = await file.arrayBuffer();
-    const buf = await ac().decodeAudioData(arr);
+    let buf, nativeSR = sniffSampleRate(arr);
+
+    if(nativeSR){
+      // header gave us the true rate → decode at exactly that rate (no resample)
+      try{ buf = await decodeAtRate(arr, nativeSR); }
+      catch(e){ buf = null; }
+    }
+    if(!buf){
+      // fallback for formats we can't sniff (m4a/ogg/mp3) or if offline decode failed:
+      // decode once to learn the rate, then re-decode at that rate to lock it in.
+      const probe = await ac().decodeAudioData(arr.slice(0));
+      const sr = probe.sampleRate;
+      try{ buf = await decodeAtRate(arr, sr); }
+      catch(e){ buf = probe; }   // last resort: use probe as-is
+    }
+
     const channels = [];
     for(let ci=0;ci<buf.numberOfChannels;ci++){
       channels.push(new Float32Array(buf.getChannelData(ci)));
     }
     createWindow(file.name, buf.sampleRate, channels, x, y);
+    if(nativeSR && buf.sampleRate!==nativeSR){
+      toast(`注意: ${file.name} のSRを保持できませんでした（${nativeSR}→${buf.sampleRate}）`);
+    }
   }catch(e){
     console.error(e);
-    toast(`Failed to load: ${file.name} (possibly unsupported format)`);
+    toast(`読み込み失敗: ${file.name}（非対応フォーマットの可能性）`);
   }
 }
 document.getElementById('openBtn').addEventListener('click', ()=>document.getElementById('fileInput').click());
