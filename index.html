@@ -181,6 +181,9 @@ canvas.overview{position:absolute;inset:0;width:100%;height:100%;cursor:pointer}
   background:var(--edbg);border:1px solid var(--line2);border-radius:3px;padding:2px 4px;
   text-align:right;user-select:text;-webkit-user-select:text;
 }
+.statusbar label.snaplbl{display:flex;align-items:center;gap:4px;cursor:pointer;color:var(--dim)}
+.statusbar label.snaplbl:hover{color:var(--text)}
+.statusbar label.snaplbl input{accent-color:var(--amber);margin:0}
 
 /* ---------- drag ghost ---------- */
 #ghost{
@@ -298,7 +301,7 @@ canvas.overview{position:absolute;inset:0;width:100%;height:100%;cursor:pointer}
     <p>A wave editor that runs entirely in your browser. Audio files you load are processed <strong>only on your device</strong> — nothing is ever uploaded to or stored on a server. No install, no account.</p>
 
     <h3>Features</h3>
-    <p>Loads WAV / AIFF / FLAC / MP3. Range selection with zero-cross snapping (hold Shift for raw selection), fade in/out (5 curves), normalize, gain (±dB), delete / copy / paste (insert at cursor) / extract selection to a new file, loop playback, play-from-start, loop seam check (auditions the end→start transition), markers (add / remove / clear), bar/beat ruler (set BPM and time signature in the status bar), OGG loop tags (LOOPSTART / LOOPLENGTH read into markers on import, and embedded from markers 1–2 on export), click-to-copy time and sample readouts in the status bar, undo/redo, light/dark theme. Exports WAV (16/24-bit + TPDF dither, 32-bit float), OGG Vorbis (VBR quality) and MP3 (CBR bitrate).</p>
+    <p>Loads WAV / AIFF / FLAC / MP3. Range selection with zero-cross snapping (hold Shift for raw selection), fade in/out (5 curves), normalize, gain (±dB), delete / copy / paste (insert at cursor) / extract selection to a new file, loop playback, play-from-start, loop seam check (auditions the end→start transition), markers (add / remove / clear, beat-grid snap on/off — hold Shift to bypass), bar/beat ruler (set BPM and time signature in the status bar), OGG loop tags (LOOPSTART / LOOPLENGTH read into markers on import, and embedded from markers 1–2 on export), click-to-copy time and sample readouts in the status bar, undo/redo, light/dark theme. Exports WAV (16/24-bit + TPDF dither, 32-bit float), OGG Vorbis (VBR quality) and MP3 (CBR bitrate).</p>
 
     <h3>Credits</h3>
     <p>Designed &amp; built by <a href="https://lisareco.com" target="_blank" rel="noopener">Raito / Lisa Records Inc. (株式会社リサレコ)</a>.</p>
@@ -329,7 +332,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
     <h3>Disclaimer</h3>
     <p>This tool is provided as-is. The author accepts no liability for the results of any processing. Always keep backups of important audio files.</p>
-    <p style="color:var(--dim);font-size:11px;margin-top:14px">Version 2026.07.07b · © 2026 Lisa Records Inc. (株式会社リサレコ)</p>
+    <p style="color:var(--dim);font-size:11px;margin-top:14px">Version 2026.07.07c · © 2026 Lisa Records Inc. (株式会社リサレコ)</p>
   </div>
 </div>
 
@@ -353,8 +356,8 @@ const THEMES = {
     wave:['#C98A4A','#AE6A32','#95502A'], waveOv:'#C7A176',
     selFill:'rgba(91,135,181,.18)', selLine:'rgba(60,90,130,.85)', ovSel:'rgba(91,135,181,.25)',
     cursor:'#8A5A22', playhead:'#6B4415',
-    bar:'rgba(178,112,45,.30)', beat:'rgba(178,112,45,.12)',
-    barLbl:'rgba(150,90,30,.85)', beatLbl:'rgba(150,90,30,.5)',
+    bar:'rgba(60,90,130,.50)', beat:'rgba(60,90,130,.18)',
+    barLbl:'rgba(40,70,110,.95)', beatLbl:'rgba(40,70,110,.55)',
     marker:'#8A55C0', markerLine:'rgba(138,85,192,.6)', markerTxt:'#FFFFFF',
     vpStroke:'#B5722F', vpFill:'rgba(181,114,47,.08)', ghost:'#B06B33' },
   dark:{ cvBg:'#0d1014', ovBg:'#0b0e12', grid:'rgba(80,95,110,.14)', lbl:'#48535f',
@@ -362,8 +365,8 @@ const THEMES = {
     wave:['#ffb36b','#f08348','#e0572f'], waveOv:'#6b4a33',
     selFill:'rgba(127,208,228,.16)', selLine:'rgba(127,208,228,.85)', ovSel:'rgba(127,208,228,.25)',
     cursor:'#ffe8c2', playhead:'#ffe8c2',
-    bar:'rgba(255,179,107,.16)', beat:'rgba(255,179,107,.06)',
-    barLbl:'rgba(255,179,107,.65)', beatLbl:'rgba(255,179,107,.35)',
+    bar:'rgba(138,166,204,.50)', beat:'rgba(138,166,204,.18)',
+    barLbl:'rgba(178,204,236,.95)', beatLbl:'rgba(178,204,236,.55)',
     marker:'#d08bff', markerLine:'rgba(208,139,255,.7)', markerTxt:'#1a1020',
     vpStroke:'#ffb36b', vpFill:'rgba(255,179,107,.07)', ghost:'#f08348' }
 };
@@ -526,6 +529,7 @@ function createWindow(name, sampleRate, channels, x, y){
         <option value="7/8">7/8</option>
         <option value="12/8">12/8</option>
       </select>
+      <label class="snaplbl" title="Snap markers to the beat grid (hold Shift to bypass)"><input type="checkbox" class="snapgrid" checked> Snap</label>
     </div>`;
   desktop.appendChild(el);
   emptyEl.style.display = 'none';
@@ -536,7 +540,7 @@ function createWindow(name, sampleRate, channels, x, y){
     length: channels[0].length,
     selS: -1, selE: -1,
     cursor: 0, markers: [], vzoom: 1,
-    bpm: 120, tsigN: 4, tsigD: 4,
+    bpm: 120, tsigN: 4, tsigD: 4, snapGrid: true,
     viewStart: 0, spp: 1,          // samples per pixel
     playing: false, src: null, playT0: 0, playS0: 0, playEnd: 0, playOff: 0, loop: false, seam: null,
     undo: [], redo: [],
@@ -637,6 +641,14 @@ function snapZeroCross(w, s){
   return s;
 }
 function sampleToPx(w, s){ return (s - w.viewStart)/w.spp; }
+function snapToGrid(w, s){
+  // magnet to the nearest beat line (within 8 CSS px) when grid snap is on
+  if(!w.snapGrid || !(w.bpm>0)) return s;
+  const spBeat = w.sampleRate*60/w.bpm*(4/w.tsigD);
+  const nearest = Math.round(s/spBeat)*spBeat;
+  if(Math.abs(nearest-s)/w.spp <= 8) return clamp(Math.round(nearest), 0, w.length);
+  return s;
+}
 
 function columnMinMax(w, ci, s0, s1){
   // min/max of channel ci over [s0,s1)
@@ -1633,6 +1645,8 @@ function bindWindow(w){
     const [n,d] = tsigSel.value.split('/').map(Number);
     if(n>0 && d>0){ w.tsigN=n; w.tsigD=d; render(w); }
   });
+  const snapChk = el.querySelector('.snapgrid');
+  snapChk.addEventListener('change', ()=>{ w.snapGrid = snapChk.checked; });
 
   // title bar drag
   const tb = el.querySelector('.titlebar');
@@ -1765,7 +1779,9 @@ function bindWindow(w){
     if(Math.hypot(dx,dy)>3) dragState.moved = true;
 
     if(dragState.mode==='marker'){
-      w.markers[dragState.idx] = clamp(pxToSample(w, ev.offsetX), 0, w.length);
+      let s = pxToSample(w, ev.offsetX);
+      if(!ev.shiftKey) s = snapToGrid(w, s);
+      w.markers[dragState.idx] = clamp(s, 0, w.length);
       render(w);
       return;
     }
@@ -1882,7 +1898,7 @@ function clearMarkers(w){
 }
 function addMarker(w){
   if(w.markers.length>=4){ toast('Up to 4 markers only'); return; }
-  const m = clamp(Math.round(w.cursor), 0, w.length);
+  const m = clamp(Math.round(snapToGrid(w, w.cursor)), 0, w.length);
   if(w.markers.some(x=>Math.abs(x-m)<2)){ toast('A marker already exists at this position'); return; }
   w.markers.push(m);
   render(w);
