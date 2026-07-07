@@ -8,19 +8,60 @@
 <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#101318;
-  --panel:#1a1f26;
-  --panel2:#151a20;
-  --line:#2a323c;
-  --line2:#39434f;
-  --text:#c9d2dc;
-  --dim:#6e7a86;
-  --amber:#ffb36b;
-  --ember:#e0572f;
-  --sel:#7fd0e4;
-  --playhead:#ffe8c2;
+  /* WEAVE palette — light (paper), shared with TALLY */
+  --bg:#F1EFE8;
+  --panel:#F6F4EE;
+  --panel2:#EFECE2;
+  --line:#E2DDD0;
+  --line2:#D6CFC0;
+  --text:#2B2A26;
+  --dim:#6E6A5E;
+  --amber:#3C5A82;      /* accent: 琉球藍 (WEAVE/TALLY共通) */
+  --asoft:#DCE4EE;
+  --ember:#A34B3E;
+  --sel:#5B87B5;
+  --good:#4C7A55;
+  --warn:#A0782A;
+  --btn:#EDEAE0;
+  --btn-h:#E4E0D3;
+  --edbg:#FAF9F6;
+  --ph:#B9B4A5;
+  --acc-contrast:#FFFFFF;
+  --badge:rgba(250,249,246,.92);
+  --scrim:rgba(43,42,38,.35);
+  --shadow:0 16px 44px rgba(43,42,38,.20),0 2px 8px rgba(43,42,38,.12);
+  --shadow2:0 12px 32px rgba(43,42,38,.22);
+  --bgfx:radial-gradient(1200px 600px at 70% -10%,rgba(60,90,130,.05),transparent 60%);
+  --dots:rgba(43,42,38,.06);
   --mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
   --ui:'Chakra Petch','Hiragino Sans',system-ui,sans-serif;
+}
+body.dark{
+  /* WEAVE palette — dark */
+  --bg:#14161B;
+  --panel:#181B21;
+  --panel2:#12141A;
+  --line:#2A2E37;
+  --line2:#39434F;
+  --text:#D9D6CC;
+  --dim:#8B897F;
+  --amber:#8AA6CC;
+  --asoft:#26303F;
+  --ember:#C96A55;
+  --sel:#7FB0D0;
+  --good:#8DE0A0;
+  --warn:#FFD27F;
+  --btn:#222833;
+  --btn-h:#2B3340;
+  --edbg:#15181E;
+  --ph:#3D4855;
+  --acc-contrast:#14161B;
+  --badge:rgba(20,22,27,.92);
+  --scrim:rgba(6,8,11,.66);
+  --shadow:0 16px 44px rgba(0,0,0,.55),0 2px 8px rgba(0,0,0,.4);
+  --shadow2:0 12px 32px rgba(0,0,0,.6);
+  --bgfx:radial-gradient(1200px 600px at 70% -10%,rgba(138,166,204,.05),transparent 60%);
+  --dots:rgba(160,175,195,.07);
 }
 *{box-sizing:border-box;margin:0;padding:0;user-select:none;-webkit-user-select:none}
 html,body{height:100%;overflow:hidden}
@@ -29,7 +70,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--ui);font-size:13px
 /* ---------- top bar ---------- */
 #appbar{
   height:46px;display:flex;align-items:center;gap:14px;padding:0 14px;
-  background:linear-gradient(#1c222a,#161b21);border-bottom:1px solid var(--line);
+  background:var(--panel2);border-bottom:1px solid var(--line);
   position:relative;z-index:5000;
 }
 #logo{display:flex;align-items:baseline;gap:8px}
@@ -38,34 +79,33 @@ body{background:var(--bg);color:var(--text);font-family:var(--ui);font-size:13px
 #appbar .spacer{flex:1}
 .btn{
   font-family:var(--ui);font-size:12px;font-weight:600;letter-spacing:.04em;
-  color:var(--text);background:#222a33;border:1px solid var(--line2);
+  color:var(--text);background:var(--btn);border:1px solid var(--line2);
   border-radius:4px;padding:5px 11px;cursor:pointer;line-height:1;
 }
-.btn:hover{background:#2b3540;border-color:#4a5663}
+.btn:hover{background:var(--btn-h);border-color:var(--dim)}
 .btn:active{transform:translateY(1px)}
 .btn:focus-visible{outline:2px solid var(--sel);outline-offset:1px}
-.btn.warm{color:#1a120c;background:linear-gradient(#ffb36b,#ef8a4a);border-color:#b86a35}
-.btn.warm:hover{background:linear-gradient(#ffc285,#f59658)}
+.btn.warm{color:var(--acc-contrast);background:var(--amber);border-color:var(--amber)}
+.btn.warm:hover{opacity:.88}
 #hint{font-size:11px;color:var(--dim);letter-spacing:.05em}
 
 /* ---------- desktop ---------- */
 #desktop{
   position:absolute;inset:46px 0 0 0;overflow:hidden;
-  background:
-    radial-gradient(1200px 600px at 70% -10%,rgba(255,179,107,.05),transparent 60%),
-    var(--bg);
+  background-image:var(--bgfx);
+  background-color:var(--bg);
 }
 #desktop::before{
   content:"";position:absolute;inset:0;pointer-events:none;
-  background-image:radial-gradient(rgba(120,140,160,.10) 1px,transparent 1px);
+  background-image:radial-gradient(var(--dots) 1px,transparent 1px);
   background-size:26px 26px;
 }
 #empty{
   position:absolute;inset:0;display:flex;flex-direction:column;gap:10px;
   align-items:center;justify-content:center;pointer-events:none;
 }
-#empty .big{font-size:21px;font-weight:600;letter-spacing:.12em;color:#3d4855}
-#empty .small{font-size:12px;color:#333d48;letter-spacing:.06em}
+#empty .big{font-size:21px;font-weight:600;letter-spacing:.12em;color:var(--ph)}
+#empty .small{font-size:12px;color:var(--ph);opacity:.75;letter-spacing:.06em}
 #desktop.dragover::after{
   content:"";position:absolute;inset:8px;border:2px dashed var(--amber);
   border-radius:10px;pointer-events:none;
@@ -74,15 +114,15 @@ body{background:var(--bg);color:var(--text);font-family:var(--ui);font-size:13px
 /* ---------- editor window ---------- */
 .win{
   position:absolute;display:flex;flex-direction:column;
-  min-width:430px;min-height:240px;width:680px;height:330px;
+  min-width:430px;min-height:266px;width:680px;height:356px;
   background:var(--panel);border:1px solid var(--line2);border-radius:8px;
-  box-shadow:0 16px 44px rgba(0,0,0,.55),0 2px 8px rgba(0,0,0,.4);
+  box-shadow:var(--shadow);
   resize:both;overflow:hidden;
 }
-.win.active{border-color:#5a6878}
+.win.active{border-color:var(--dim)}
 .titlebar{
   height:30px;display:flex;align-items:center;gap:9px;padding:0 10px;
-  background:linear-gradient(#232a33,#1b212a);border-bottom:1px solid var(--line);
+  background:var(--panel2);border-bottom:1px solid var(--line);
   cursor:grab;flex:none;
 }
 .titlebar:active{cursor:grabbing}
@@ -91,14 +131,14 @@ body{background:var(--bg);color:var(--text);font-family:var(--ui);font-size:13px
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
   border-radius:3px;padding:1px 4px;margin:-1px -2px;
 }
-.titlebar .fname:hover{background:rgba(255,255,255,.06)}
+.titlebar .fname:hover{background:var(--btn-h)}
 .titlebar .meta{font-family:var(--mono);font-size:10px;color:var(--dim);white-space:nowrap}
 .titlebar .spacer{flex:1}
 .closebtn{
   width:18px;height:18px;border-radius:50%;border:1px solid var(--line2);
-  background:#2a323c;color:#9aa7b3;font-size:11px;line-height:1;cursor:pointer;flex:none;
+  background:var(--btn);color:var(--dim);font-size:11px;line-height:1;cursor:pointer;flex:none;
 }
-.closebtn:hover{background:#c0492f;border-color:#c0492f;color:#fff}
+.closebtn:hover{background:var(--ember);border-color:var(--ember);color:#fff}
 .toolbar{
   display:flex;align-items:center;gap:5px;padding:5px 8px;flex-wrap:wrap;
   background:var(--panel2);border-bottom:1px solid var(--line);flex:none;
@@ -108,19 +148,19 @@ body{background:var(--bg);color:var(--text);font-family:var(--ui);font-size:13px
   color:var(--text);background:transparent;border:1px solid transparent;
   border-radius:4px;padding:4px 8px;cursor:pointer;line-height:1;
 }
-.tbtn:hover{background:#252d37;border-color:var(--line2)}
+.tbtn:hover{background:var(--btn-h);border-color:var(--line2)}
 .tbtn:active{transform:translateY(1px)}
 .tbtn:disabled{opacity:.35;cursor:default}
 .tbtn:disabled:hover{background:transparent;border-color:transparent}
 .toolbar select{
   font-family:var(--ui);font-size:11px;font-weight:600;color:var(--text);
-  background:#222a33;border:1px solid var(--line2);border-radius:4px;padding:3px 4px;
+  background:var(--btn);border:1px solid var(--line2);border-radius:4px;padding:3px 4px;
 }
-.tbtn.play{color:#8de0a0;font-size:12px;min-width:30px}
+.tbtn.play{color:var(--good);font-size:12px;min-width:30px}
 .tsep{width:1px;height:16px;background:var(--line);margin:0 3px}
-.canvaswrap{flex:1;position:relative;min-height:60px;background:#0d1014}
+.canvaswrap{flex:1;position:relative;min-height:60px;background:var(--edbg)}
 canvas.wave{position:absolute;inset:0;width:100%;height:100%;cursor:text}
-.overviewwrap{height:34px;flex:none;border-top:1px solid var(--line);position:relative;background:#0b0e12}
+.overviewwrap{height:34px;flex:none;border-top:1px solid var(--line);position:relative;background:var(--edbg)}
 canvas.overview{position:absolute;inset:0;width:100%;height:100%;cursor:pointer}
 .statusbar{
   height:26px;flex:none;display:flex;align-items:center;gap:14px;padding:0 10px;
@@ -129,26 +169,31 @@ canvas.overview{position:absolute;inset:0;width:100%;height:100%;cursor:pointer}
 }
 .statusbar b{color:var(--text);font-weight:500}
 .statusbar .copyable{cursor:pointer;border-radius:3px;padding:1px 3px;margin:0 -3px}
-.statusbar .copyable:hover{background:#222a33;color:var(--text)}
-.statusbar .copyable:active{background:#2b3540}
+.statusbar .copyable:hover{background:var(--btn-h);color:var(--text)}
+.statusbar .copyable:active{background:var(--btn)}
 .statusbar .spacer{flex:1}
 .statusbar select{
   font-family:var(--mono);font-size:10.5px;color:var(--text);
-  background:#222a33;border:1px solid var(--line2);border-radius:3px;padding:2px 4px;
+  background:var(--btn);border:1px solid var(--line2);border-radius:3px;padding:2px 4px;
+}
+.statusbar input.bpm{
+  width:52px;font-family:var(--mono);font-size:10.5px;color:var(--amber);
+  background:var(--edbg);border:1px solid var(--line2);border-radius:3px;padding:2px 4px;
+  text-align:right;user-select:text;-webkit-user-select:text;
 }
 
 /* ---------- drag ghost ---------- */
 #ghost{
   position:fixed;z-index:9999;pointer-events:none;display:none;
   width:150px;height:54px;border:1px solid var(--amber);border-radius:6px;
-  background:rgba(26,31,38,.92);box-shadow:0 10px 26px rgba(0,0,0,.6);
+  background:var(--badge);box-shadow:var(--shadow2);
   padding:4px 8px;font-size:10px;color:var(--amber);letter-spacing:.05em;
 }
 #ghost canvas{width:100%;height:32px;display:block}
 
 #toast{
   position:fixed;left:50%;bottom:26px;transform:translateX(-50%);
-  background:#232a33;border:1px solid var(--line2);border-radius:6px;
+  background:var(--btn);border:1px solid var(--line2);border-radius:6px;
   padding:8px 16px;font-size:12px;color:var(--text);z-index:9998;
   opacity:0;transition:opacity .25s;pointer-events:none;
 }
@@ -158,28 +203,28 @@ canvas.overview{position:absolute;inset:0;width:100%;height:100%;cursor:pointer}
 #normPop,#gainPop{
   position:fixed;display:none;z-index:9000;
   background:var(--panel);border:1px solid var(--line2);border-radius:6px;
-  box-shadow:0 12px 32px rgba(0,0,0,.6);padding:10px;min-width:216px;
+  box-shadow:var(--shadow2);padding:10px;min-width:216px;
   font-size:12px;color:var(--text);
 }
 #normPop,#gainPop .row{display:flex;align-items:center;gap:6px;margin-bottom:8px}
 #normPop,#gainPop .row:last-child{margin-bottom:0}
 #normPop,#gainPop input{
   width:66px;font-family:var(--mono);font-size:12px;color:var(--amber);
-  background:#10141a;border:1px solid var(--line2);border-radius:4px;padding:4px 6px;
+  background:var(--edbg);border:1px solid var(--line2);border-radius:4px;padding:4px 6px;
   user-select:text;-webkit-user-select:text;text-align:right;
 }
 #normPop,#gainPop .presets button{
   flex:1;font-family:var(--mono);font-size:10.5px;color:var(--text);
-  background:#222a33;border:1px solid var(--line2);border-radius:4px;
+  background:var(--btn);border:1px solid var(--line2);border-radius:4px;
   padding:4px 0;cursor:pointer;
 }
-#normPop,#gainPop .presets button:hover{background:#2b3540}
+#normPop,#gainPop .presets button:hover{background:var(--btn-h)}
 #normPop,#gainPop .apply{
   width:100%;font-family:var(--ui);font-weight:600;font-size:12px;
-  color:#1a120c;background:linear-gradient(#ffb36b,#ef8a4a);
-  border:1px solid #b86a35;border-radius:4px;padding:6px 0;cursor:pointer;
+  color:var(--acc-contrast);background:var(--amber);
+  border:1px solid var(--amber);border-radius:4px;padding:6px 0;cursor:pointer;
 }
-#normPop,#gainPop .apply:hover{background:linear-gradient(#ffc285,#f59658)}
+#normPop,#gainPop .apply:hover{opacity:.88}
 
 /* ---------- about / license modal ---------- */
 #aboutBtn{
@@ -187,17 +232,17 @@ canvas.overview{position:absolute;inset:0;width:100%;height:100%;cursor:pointer}
   background:transparent;border:1px solid var(--line2);border-radius:4px;
   padding:5px 10px;cursor:pointer;line-height:1;
 }
-#aboutBtn:hover{color:var(--text);border-color:#4a5663}
+#aboutBtn:hover{color:var(--text);border-color:var(--dim)}
 #modalBack{
   position:fixed;inset:0;z-index:9500;display:none;
-  background:rgba(6,8,11,.66);backdrop-filter:blur(2px);
+  background:var(--scrim);backdrop-filter:blur(2px);
   align-items:center;justify-content:center;
 }
 #modalBack.show{display:flex}
 #aboutModal{
   width:min(560px,92vw);max-height:84vh;overflow-y:auto;
   background:var(--panel);border:1px solid var(--line2);border-radius:10px;
-  box-shadow:0 24px 60px rgba(0,0,0,.6);padding:22px 24px;
+  box-shadow:var(--shadow2);padding:22px 24px;
   font-size:13px;line-height:1.7;color:var(--text);user-select:text;-webkit-user-select:text;
 }
 #aboutModal h2{font-size:18px;letter-spacing:.14em;color:var(--amber);font-weight:700;margin-bottom:2px}
@@ -206,20 +251,20 @@ canvas.overview{position:absolute;inset:0;width:100%;height:100%;cursor:pointer}
   font-size:11px;letter-spacing:.12em;color:var(--amber);font-weight:600;
   text-transform:uppercase;margin:18px 0 6px;border-bottom:1px solid var(--line);padding-bottom:4px;
 }
-#aboutModal p{margin-bottom:8px;color:#aeb8c2}
+#aboutModal p{margin-bottom:8px;color:var(--dim)}
 #aboutModal a{color:var(--sel);text-decoration:none}
 #aboutModal a:hover{text-decoration:underline}
 #aboutModal .lic{
-  font-family:var(--mono);font-size:10.5px;line-height:1.55;color:#8b97a3;
-  background:#10141a;border:1px solid var(--line);border-radius:6px;
+  font-family:var(--mono);font-size:10.5px;line-height:1.55;color:var(--dim);
+  background:var(--edbg);border:1px solid var(--line);border-radius:6px;
   padding:10px 12px;margin-top:6px;white-space:pre-wrap;
 }
 #aboutModal .close{
   position:sticky;top:0;float:right;width:26px;height:26px;border-radius:50%;
-  border:1px solid var(--line2);background:#2a323c;color:#9aa7b3;
+  border:1px solid var(--line2);background:var(--btn);color:var(--dim);
   font-size:14px;cursor:pointer;margin:-6px -6px 0 0;
 }
-#aboutModal .close:hover{background:#c0492f;border-color:#c0492f;color:#fff}
+#aboutModal .close:hover{background:var(--ember);border-color:var(--ember);color:#fff}
 @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
@@ -229,6 +274,7 @@ canvas.overview{position:absolute;inset:0;width:100%;height:100%;cursor:pointer}
   <div id="logo"><span class="name">CARVE</span><span class="sub">WAVE EDITOR · LISA RECORDS</span></div>
   <div class="spacer"></div>
   <span id="hint">Click = cursor (←→ nudge) · Enter = play from start · M = marker (⇧M / dbl-click head = remove) · dbl-click = select between markers · Space = loop selection · Shift-drag = no zero-snap · ↑↓ v-zoom</span>
+  <button class="btn" id="themeBtn" title="ライト/ダーク切替">◐</button>
   <button id="aboutBtn">About</button>
   <button class="btn warm" id="openBtn">Open…</button>
   <input type="file" id="fileInput" accept="audio/*,.wav,.aif,.aiff,.flac,.mp3,.ogg,.m4a" multiple hidden>
@@ -252,7 +298,7 @@ canvas.overview{position:absolute;inset:0;width:100%;height:100%;cursor:pointer}
     <p>A wave editor that runs entirely in your browser. Audio files you load are processed <strong>only on your device</strong> — nothing is ever uploaded to or stored on a server. No install, no account.</p>
 
     <h3>Features</h3>
-    <p>Loads WAV / AIFF / FLAC / MP3. Range selection with zero-cross snapping (hold Shift for raw selection), fade in/out (5 curves), normalize, gain (±dB), delete / copy / paste (insert at cursor) / extract selection to a new file, loop playback, play-from-start, loop seam check (auditions the end→start transition), markers (add / remove / clear), undo/redo, OGG loop tags (LOOPSTART / LOOPLENGTH read into markers on import, and embedded from markers 1–2 on export), click-to-copy time readouts in the status bar. Exports WAV (16/24-bit + TPDF dither, 32-bit float), OGG Vorbis (VBR quality) and MP3 (CBR bitrate).</p>
+    <p>Loads WAV / AIFF / FLAC / MP3. Range selection with zero-cross snapping (hold Shift for raw selection), fade in/out (5 curves), normalize, gain (±dB), delete / copy / paste (insert at cursor) / extract selection to a new file, loop playback, play-from-start, loop seam check (auditions the end→start transition), markers (add / remove / clear), bar/beat ruler (set BPM and time signature in the status bar), OGG loop tags (LOOPSTART / LOOPLENGTH read into markers on import, and embedded from markers 1–2 on export), click-to-copy time and sample readouts in the status bar, undo/redo, light/dark theme. Exports WAV (16/24-bit + TPDF dither, 32-bit float), OGG Vorbis (VBR quality) and MP3 (CBR bitrate).</p>
 
     <h3>Credits</h3>
     <p>Designed &amp; built by <a href="https://lisareco.com" target="_blank" rel="noopener">Raito / Lisa Records Inc. (株式会社リサレコ)</a>.</p>
@@ -283,7 +329,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
     <h3>Disclaimer</h3>
     <p>This tool is provided as-is. The author accepts no liability for the results of any processing. Always keep backups of important audio files.</p>
-    <p style="color:#6e7a86;font-size:11px;margin-top:14px">Version 2026.07.02d · © 2026 Lisa Records Inc. (株式会社リサレコ)</p>
+    <p style="color:var(--dim);font-size:11px;margin-top:14px">Version 2026.07.07b · © 2026 Lisa Records Inc. (株式会社リサレコ)</p>
   </div>
 </div>
 
@@ -299,6 +345,30 @@ const ghost = document.getElementById('ghost');
 const ghostLabel = document.getElementById('ghostLabel');
 const ghostCanvas = document.getElementById('ghostCanvas');
 const toastEl = document.getElementById('toast');
+
+/* ---------- theme (WEAVE palette, shared with TALLY) ---------- */
+const THEMES = {
+  light:{ cvBg:'#FAF9F6', ovBg:'#F3F1EA', grid:'rgba(90,100,120,.18)', lbl:'#9A9484',
+    mid:'#CFC9BA', midSoft:'rgba(207,201,186,.6)',
+    wave:['#C98A4A','#AE6A32','#95502A'], waveOv:'#C7A176',
+    selFill:'rgba(91,135,181,.18)', selLine:'rgba(60,90,130,.85)', ovSel:'rgba(91,135,181,.25)',
+    cursor:'#8A5A22', playhead:'#6B4415',
+    bar:'rgba(178,112,45,.30)', beat:'rgba(178,112,45,.12)',
+    barLbl:'rgba(150,90,30,.85)', beatLbl:'rgba(150,90,30,.5)',
+    marker:'#8A55C0', markerLine:'rgba(138,85,192,.6)', markerTxt:'#FFFFFF',
+    vpStroke:'#B5722F', vpFill:'rgba(181,114,47,.08)', ghost:'#B06B33' },
+  dark:{ cvBg:'#0d1014', ovBg:'#0b0e12', grid:'rgba(80,95,110,.14)', lbl:'#48535f',
+    mid:'#3a4350', midSoft:'rgba(58,67,80,.5)',
+    wave:['#ffb36b','#f08348','#e0572f'], waveOv:'#6b4a33',
+    selFill:'rgba(127,208,228,.16)', selLine:'rgba(127,208,228,.85)', ovSel:'rgba(127,208,228,.25)',
+    cursor:'#ffe8c2', playhead:'#ffe8c2',
+    bar:'rgba(255,179,107,.16)', beat:'rgba(255,179,107,.06)',
+    barLbl:'rgba(255,179,107,.65)', beatLbl:'rgba(255,179,107,.35)',
+    marker:'#d08bff', markerLine:'rgba(208,139,255,.7)', markerTxt:'#1a1020',
+    vpStroke:'#ffb36b', vpFill:'rgba(255,179,107,.07)', ghost:'#f08348' }
+};
+if(localStorage.getItem('carve.theme')==='dark') document.body.classList.add('dark');
+let CV = document.body.classList.contains('dark') ? THEMES.dark : THEMES.light;
 let AC = null;
 function ac(){ if(!AC) AC = new (window.AudioContext||window.webkitAudioContext)(); return AC; }
 
@@ -440,6 +510,22 @@ function createWindow(name, sampleRate, channels, x, y){
         <option value="320" selected>320kbps</option>
       </select>
       <button class="tbtn" data-a="export" title="Export audio">Export WAV</button>
+    </div>
+    <div class="statusbar">
+      <span class="copyable" data-copy="lensmp" title="Click to copy (samples)">len <b class="st-lensmp"></b> smp</span>
+      <span class="copyable" data-copy="selsmp" title="Click to copy (samples)">sel <b class="st-selsmp">—</b></span>
+      <span class="copyable" data-copy="cursmp" title="Click to copy (samples)">cur <b class="st-cursmp">—</b></span>
+      <span class="spacer"></span>
+      <span>BPM</span><input class="bpm" type="number" min="20" max="999" step="0.01" value="120" title="Tempo for the bar/beat ruler">
+      <select class="tsig" title="Time signature for the bar/beat ruler">
+        <option value="4/4" selected>4/4</option>
+        <option value="3/4">3/4</option>
+        <option value="2/4">2/4</option>
+        <option value="5/4">5/4</option>
+        <option value="6/8">6/8</option>
+        <option value="7/8">7/8</option>
+        <option value="12/8">12/8</option>
+      </select>
     </div>`;
   desktop.appendChild(el);
   emptyEl.style.display = 'none';
@@ -450,6 +536,7 @@ function createWindow(name, sampleRate, channels, x, y){
     length: channels[0].length,
     selS: -1, selE: -1,
     cursor: 0, markers: [], vzoom: 1,
+    bpm: 120, tsigN: 4, tsigD: 4,
     viewStart: 0, spp: 1,          // samples per pixel
     playing: false, src: null, playT0: 0, playS0: 0, playEnd: 0, playOff: 0, loop: false, seam: null,
     undo: [], redo: [],
@@ -476,10 +563,16 @@ function createWindow(name, sampleRate, channels, x, y){
 function updateMeta(w){
   w.el.querySelector('.meta').textContent =
     `${(w.sampleRate/1000).toFixed(1)}kHz · ${w.channels.length}ch · ${fmtTime(w.length,w.sampleRate)}`;
-  w.el.querySelector('.st-len').textContent = `${fmtTime(w.length,w.sampleRate)} (${w.length.toLocaleString()} smp)`;
+  w.el.querySelector('.st-len').textContent = fmtTime(w.length,w.sampleRate);
+  w.el.querySelector('.st-lensmp').textContent = w.length.toLocaleString();
   let pk=0;
   w.peaks.forEach(p=>{ for(let i=0;i<p.mx.length;i++){ pk=Math.max(pk,p.mx[i],-p.mn[i]); }});
   w.el.querySelector('.st-peak').textContent = dB(pk);
+}
+
+function setCursorReadout(w, s){
+  w.el.querySelector('.st-cur').textContent = fmtTime(s, w.sampleRate);
+  w.el.querySelector('.st-cursmp').textContent = Math.round(s).toLocaleString();
 }
 
 function setActive(w){
@@ -570,19 +663,19 @@ function render(w){
   g.setTransform(dpr,0,0,dpr,0,0);
   const W = c.width/dpr, H = c.height/dpr;
   g.clearRect(0,0,W,H);
-  g.fillStyle = '#0d1014'; g.fillRect(0,0,W,H);
+  g.fillStyle = CV.cvBg; g.fillRect(0,0,W,H);
 
   const nCh = w.channels.length;
   const laneH = H/nCh;
 
   // time grid
-  g.strokeStyle = 'rgba(80,95,110,.14)'; g.lineWidth = 1;
+  g.strokeStyle = CV.grid; g.lineWidth = 1;
   const secPx = w.sampleRate / w.spp;
   let step = 1;
   while(secPx*step < 70) step *= 2;
   while(secPx*step > 320) step /= 2;
   const t0 = Math.floor((w.viewStart/w.sampleRate)/step)*step;
-  g.fillStyle = '#48535f'; g.font = '9px '+getComputedStyle(document.body).getPropertyValue('--mono');
+  g.fillStyle = CV.lbl; g.font = '9px '+getComputedStyle(document.body).getPropertyValue('--mono');
   for(let t=t0;;t+=step){
     const px = sampleToPx(w, t*w.sampleRate);
     if(px>W) break;
@@ -591,17 +684,49 @@ function render(w){
     g.fillText(fmtTime(t*w.sampleRate,w.sampleRate).slice(0,9), px+3, 10);
   }
 
+  // bar / beat grid (labels drawn just below the seconds row)
+  if(w.bpm > 0){
+    const spBeat = w.sampleRate * 60 / w.bpm * (4 / w.tsigD);
+    const spBar = spBeat * w.tsigN;
+    const barPx = spBar / w.spp;
+    let barStep = 1;
+    while(barPx * barStep < 80) barStep *= 2;
+    const showBeats = barStep === 1 && (spBeat / w.spp) >= 56;
+    const firstBar = Math.max(0, Math.floor(w.viewStart / (spBar * barStep)) * barStep);
+    for(let b = firstBar; ; b += barStep){
+      const s = b * spBar;
+      const px = sampleToPx(w, s);
+      if(px > W) break;
+      if(px >= -1){
+        g.strokeStyle = CV.bar;
+        g.beginPath(); g.moveTo(px,0); g.lineTo(px,H); g.stroke();
+        g.fillStyle = CV.barLbl;
+        g.fillText(showBeats ? `${b+1}.1` : String(b+1), px+3, 21);
+      }
+      if(showBeats){
+        for(let bt=1; bt<w.tsigN; bt++){
+          const bpx = sampleToPx(w, s + bt*spBeat);
+          if(bpx < 0 || bpx > W) continue;
+          g.strokeStyle = CV.beat;
+          g.beginPath(); g.moveTo(bpx,0); g.lineTo(bpx,H); g.stroke();
+          g.fillStyle = CV.beatLbl;
+          g.fillText(`${b+1}.${bt+1}`, bpx+3, 21);
+        }
+      }
+    }
+  }
+
   for(let ci=0; ci<nCh; ci++){
     const yMid = laneH*ci + laneH/2;
     const amp = laneH*0.46*w.vzoom;
     g.save(); g.beginPath(); g.rect(0,laneH*ci,W,laneH); g.clip();
     // center line
-    g.strokeStyle = '#3a4350'; g.lineWidth = 1;
+    g.strokeStyle = CV.mid; g.lineWidth = 1;
     g.beginPath(); g.moveTo(0,yMid); g.lineTo(W,yMid); g.stroke();
-    if(ci>0){ g.strokeStyle='rgba(58,67,80,.5)'; g.beginPath(); g.moveTo(0,laneH*ci); g.lineTo(W,laneH*ci); g.stroke(); }
+    if(ci>0){ g.strokeStyle=CV.midSoft; g.beginPath(); g.moveTo(0,laneH*ci); g.lineTo(W,laneH*ci); g.stroke(); }
 
     const grad = g.createLinearGradient(0, yMid-amp, 0, yMid+amp);
-    grad.addColorStop(0,'#ffb36b'); grad.addColorStop(.5,'#f08348'); grad.addColorStop(1,'#e0572f');
+    grad.addColorStop(0,CV.wave[0]); grad.addColorStop(.5,CV.wave[1]); grad.addColorStop(1,CV.wave[2]);
 
     if(w.spp >= 1.5){
       g.fillStyle = grad;
@@ -630,9 +755,9 @@ function render(w){
   if(w.selS>=0 && w.selE>w.selS){
     const x1 = sampleToPx(w,w.selS), x2 = sampleToPx(w,w.selE);
     if(x2>0 && x1<W){
-      g.fillStyle = 'rgba(127,208,228,.16)';
+      g.fillStyle = CV.selFill;
       g.fillRect(Math.max(0,x1),0,Math.min(W,x2)-Math.max(0,x1),H);
-      g.strokeStyle = 'rgba(127,208,228,.85)'; g.lineWidth=1;
+      g.strokeStyle = CV.selLine; g.lineWidth=1;
       if(x1>=0&&x1<=W){ g.beginPath(); g.moveTo(x1,0); g.lineTo(x1,H); g.stroke(); }
       if(x2>=0&&x2<=W){ g.beginPath(); g.moveTo(x2,0); g.lineTo(x2,H); g.stroke(); }
     }
@@ -641,7 +766,7 @@ function render(w){
   // play cursor (dashed)
   const cpx = sampleToPx(w, w.cursor);
   if(cpx>=-1 && cpx<=W+1){
-    g.strokeStyle = '#ffe8c2'; g.lineWidth = 1; g.setLineDash([4,3]);
+    g.strokeStyle = CV.cursor; g.lineWidth = 1; g.setLineDash([4,3]);
     g.beginPath(); g.moveTo(cpx,0); g.lineTo(cpx,H); g.stroke();
     g.setLineDash([]);
   }
@@ -651,13 +776,13 @@ function render(w){
   w.markers.forEach((m,mi)=>{
     const px = sampleToPx(w,m);
     if(px<-10||px>W+10) return;
-    g.strokeStyle = 'rgba(208,139,255,.7)'; g.lineWidth = 1;
+    g.strokeStyle = CV.markerLine; g.lineWidth = 1;
     g.beginPath(); g.moveTo(px,0); g.lineTo(px,H); g.stroke();
-    g.fillStyle = '#d08bff';
+    g.fillStyle = CV.marker;
     g.beginPath();
     g.moveTo(px-8,0); g.lineTo(px+8,0); g.lineTo(px+8,11); g.lineTo(px,17); g.lineTo(px-8,11);
     g.closePath(); g.fill();
-    g.fillStyle = '#1a1020'; g.font = mono9;
+    g.fillStyle = CV.markerTxt; g.font = mono9;
     g.fillText(String(mi+1), px-2.5, 9);
   });
 
@@ -675,17 +800,20 @@ function render(w){
     }
     const px = sampleToPx(w, s);
     if(px>=0 && px<=W){
-      g.strokeStyle = 'var(--playhead)'; g.strokeStyle = '#ffe8c2'; g.lineWidth = 1.4;
+      g.strokeStyle = CV.playhead; g.lineWidth = 1.4;
       g.beginPath(); g.moveTo(px,0); g.lineTo(px,H); g.stroke();
     }
   }
 
   renderOverview(w);
   // status
-  const sel = (w.selS>=0&&w.selE>w.selS)
+  const hasSel = w.selS>=0 && w.selE>w.selS;
+  w.el.querySelector('.st-sel').textContent = hasSel
     ? `${fmtTime(w.selS,w.sampleRate)} – ${fmtTime(w.selE,w.sampleRate)} (${fmtTime(w.selE-w.selS,w.sampleRate)})`
     : '—';
-  w.el.querySelector('.st-sel').textContent = sel;
+  w.el.querySelector('.st-selsmp').textContent = hasSel
+    ? `${w.selS.toLocaleString()} – ${w.selE.toLocaleString()} (${(w.selE-w.selS).toLocaleString()})`
+    : '—';
   w.el.querySelector('[data-a="undo"]').disabled = w.undo.length===0;
   w.el.querySelector('[data-a="redo"]').disabled = w.redo.length===0;
 }
@@ -696,9 +824,9 @@ function renderOverview(w){
   g.setTransform(dpr,0,0,dpr,0,0);
   const W = c.width/dpr, H = c.height/dpr;
   g.clearRect(0,0,W,H);
-  g.fillStyle = '#0b0e12'; g.fillRect(0,0,W,H);
+  g.fillStyle = CV.ovBg; g.fillRect(0,0,W,H);
   const spp = w.length / W;
-  g.fillStyle = '#6b4a33';
+  g.fillStyle = CV.waveOv;
   g.beginPath();
   for(let px=0;px<W;px++){
     let lo=1e9,hi=-1e9;
@@ -712,17 +840,17 @@ function renderOverview(w){
   g.fill();
   // selection marker
   if(w.selS>=0&&w.selE>w.selS){
-    g.fillStyle='rgba(127,208,228,.25)';
+    g.fillStyle=CV.ovSel;
     g.fillRect(w.selS/spp,0,(w.selE-w.selS)/spp,H);
   }
   // markers
-  g.fillStyle='#d08bff';
+  g.fillStyle=CV.marker;
   w.markers.forEach(m=>g.fillRect(m/spp,0,1.5,H));
   // viewport
   const vx = w.viewStart/spp, vw = Math.min(W, cssW(w.wave)*w.spp/spp);
-  g.strokeStyle = '#ffb36b'; g.lineWidth=1;
+  g.strokeStyle = CV.vpStroke; g.lineWidth=1;
   g.strokeRect(vx+.5,1,Math.max(4,vw)-1,H-2);
-  g.fillStyle='rgba(255,179,107,.07)';
+  g.fillStyle=CV.vpFill;
   g.fillRect(vx,1,Math.max(4,vw),H-2);
 }
 
@@ -1486,6 +1614,26 @@ function bindWindow(w){
       'Export ' + (fmtSel.value==='ogg' ? 'OGG' : fmtSel.value==='mp3' ? 'MP3' : 'WAV');
   });
 
+  // BPM / time signature (bar-beat ruler)
+  const bpmIn = el.querySelector('.bpm');
+  bpmIn.addEventListener('change', ()=>{
+    let v = parseFloat(bpmIn.value);
+    if(!isFinite(v)) v = 120;
+    v = clamp(v, 20, 999);
+    bpmIn.value = v;
+    w.bpm = v;
+    render(w);
+  });
+  bpmIn.addEventListener('keydown', ev=>{
+    if(ev.key==='Enter') bpmIn.blur();
+    ev.stopPropagation();
+  });
+  const tsigSel = el.querySelector('.tsig');
+  tsigSel.addEventListener('change', ()=>{
+    const [n,d] = tsigSel.value.split('/').map(Number);
+    if(n>0 && d>0){ w.tsigN=n; w.tsigD=d; render(w); }
+  });
+
   // title bar drag
   const tb = el.querySelector('.titlebar');
   tb.addEventListener('pointerdown', ev=>{
@@ -1516,15 +1664,18 @@ function bindWindow(w){
     window.addEventListener('pointerup',up);
   });
 
-  // status bar: click time readout to copy
-  el.querySelector('.statusbar').addEventListener('click', ev=>{
-    const c = ev.target.closest('.copyable'); if(!c) return;
-    const val = c.querySelector('b').textContent.trim();
-    if(!val || val==='—'){ toast('Nothing to copy'); return; }
-    const done = ()=>toast(`Copied: ${val}`);
-    if(navigator.clipboard && navigator.clipboard.writeText){
-      navigator.clipboard.writeText(val).then(done).catch(()=>fallbackCopy(val,done));
-    } else fallbackCopy(val, done);
+  // status bars: click a readout to copy (sample values copy without commas)
+  el.querySelectorAll('.statusbar').forEach(sb=>{
+    sb.addEventListener('click', ev=>{
+      const c = ev.target.closest('.copyable'); if(!c) return;
+      let val = c.querySelector('b').textContent.trim();
+      if(!val || val==='—'){ toast('Nothing to copy'); return; }
+      if(c.dataset.copy && c.dataset.copy.endsWith('smp')) val = val.replace(/,/g,'');
+      const done = ()=>toast(`Copied: ${val}`);
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(val).then(done).catch(()=>fallbackCopy(val,done));
+      } else fallbackCopy(val, done);
+    });
   });
 
   // toolbar / status actions
@@ -1570,7 +1721,7 @@ function bindWindow(w){
     if(dragState) return;
     const px = ev.offsetX;
     wave.style.cursor = hitMarker(px, ev.offsetY)>=0 ? 'grab' : 'text';
-    w.el.querySelector('.st-cur').textContent = fmtTime(pxToSample(w,px), w.sampleRate);
+    setCursorReadout(w, pxToSample(w,px));
   });
   function hitMarker(x, y){
     if(y>18) return -1;
@@ -1663,7 +1814,7 @@ function bindWindow(w){
       // plain click → set play cursor, clear selection
       w.cursor = st.startSample;
       w.selS=-1; w.selE=-1;
-      w.el.querySelector('.st-cur').textContent = fmtTime(w.cursor, w.sampleRate);
+      setCursorReadout(w, w.cursor);
       render(w); return;
     }
   });
@@ -1672,7 +1823,7 @@ function bindWindow(w){
     ghostLabel.textContent = `→ New file  ${fmtTime(w.selE-w.selS,w.sampleRate)}`;
     const g = ghostCanvas.getContext('2d');
     ghostCanvas.width=300; ghostCanvas.height=64;
-    g.fillStyle='#f08348';
+    g.fillStyle=CV.ghost;
     const spp=(w.selE-w.selS)/300;
     g.beginPath();
     for(let px=0;px<300;px++){
@@ -1766,7 +1917,7 @@ window.addEventListener('keydown', ev=>{
       w.viewStart = w.cursor - W*w.spp/2;
       clampView(w);
     }
-    w.el.querySelector('.st-cur').textContent = fmtTime(w.cursor, w.sampleRate);
+    setCursorReadout(w, w.cursor);
     render(w);
   }
   if(ev.code==='ArrowUp' || ev.code==='ArrowDown'){
@@ -1947,6 +2098,12 @@ document.getElementById('openBtn').addEventListener('click', ()=>document.getEle
 /* ---------- about modal ---------- */
 const modalBack = document.getElementById('modalBack');
 document.getElementById('aboutBtn').addEventListener('click', ()=>modalBack.classList.add('show'));
+document.getElementById('themeBtn').addEventListener('click', ()=>{
+  const dark = document.body.classList.toggle('dark');
+  localStorage.setItem('carve.theme', dark ? 'dark' : 'light');
+  CV = dark ? THEMES.dark : THEMES.light;
+  wins.forEach(w=>render(w));
+});
 document.getElementById('aboutClose').addEventListener('click', ()=>modalBack.classList.remove('show'));
 modalBack.addEventListener('click', ev=>{ if(ev.target===modalBack) modalBack.classList.remove('show'); });
 window.addEventListener('keydown', ev=>{
