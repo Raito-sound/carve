@@ -76,7 +76,6 @@ body.dark{
 *{box-sizing:border-box;margin:0;padding:0;user-select:none;-webkit-user-select:none}
 html,body{height:100%;overflow:hidden}
 body{background:var(--bg);color:var(--text);font-family:var(--ui);font-size:13px}
-
 /* ---------- top bar ---------- */
 #appbar{
   height:46px;display:flex;align-items:center;gap:14px;padding:0 14px;
@@ -98,7 +97,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--ui);font-size:13px
 .btn.warm{color:var(--acc-contrast);background:var(--amber);border-color:var(--amber)}
 .btn.warm:hover{opacity:.88}
 #hint{font-size:11px;color:var(--dim);letter-spacing:.05em}
-
 /* ---------- desktop ---------- */
 #desktop{
   position:absolute;inset:46px 0 0 0;overflow:hidden;
@@ -120,7 +118,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--ui);font-size:13px
   content:"";position:absolute;inset:8px;border:2px dashed var(--amber);
   border-radius:10px;pointer-events:none;
 }
-
 /* ---------- editor window ---------- */
 .win{
   position:absolute;display:flex;flex-direction:column;
@@ -168,8 +165,11 @@ body{background:var(--bg);color:var(--text);font-family:var(--ui);font-size:13px
 }
 .tbtn.play{color:var(--good);font-size:12px;min-width:30px}
 .tsep{width:1px;height:16px;background:var(--line);margin:0 3px}
-.canvaswrap{flex:1;position:relative;min-height:60px;background:var(--edbg)}
+.canvaswrap{flex:1;display:flex;position:relative;min-height:60px;background:var(--edbg)}
+.wavearea{flex:1;position:relative;min-width:0}
 canvas.wave{position:absolute;inset:0;width:100%;height:100%;cursor:text}
+.meterarea{width:44px;flex:none;position:relative;border-left:1px solid var(--line);cursor:pointer}
+canvas.meter{position:absolute;inset:0;width:100%;height:100%}
 .overviewwrap{height:34px;flex:none;border-top:1px solid var(--line);position:relative;background:var(--edbg)}
 canvas.overview{position:absolute;inset:0;width:100%;height:100%;cursor:pointer}
 .statusbar{
@@ -194,7 +194,6 @@ canvas.overview{position:absolute;inset:0;width:100%;height:100%;cursor:pointer}
 .statusbar label.snaplbl{display:flex;align-items:center;gap:4px;cursor:pointer;color:var(--dim)}
 .statusbar label.snaplbl:hover{color:var(--text)}
 .statusbar label.snaplbl input{accent-color:var(--amber);margin:0}
-
 /* ---------- drag ghost ---------- */
 #ghost{
   position:fixed;z-index:9999;pointer-events:none;display:none;
@@ -203,7 +202,6 @@ canvas.overview{position:absolute;inset:0;width:100%;height:100%;cursor:pointer}
   padding:4px 8px;font-size:10px;color:var(--amber);letter-spacing:.05em;
 }
 #ghost canvas{width:100%;height:32px;display:block}
-
 #toast{
   position:fixed;left:50%;bottom:26px;transform:translateX(-50%);
   background:var(--btn);border:1px solid var(--line2);border-radius:6px;
@@ -211,34 +209,36 @@ canvas.overview{position:absolute;inset:0;width:100%;height:100%;cursor:pointer}
   opacity:0;transition:opacity .25s;pointer-events:none;
 }
 #toast.show{opacity:1}
-
 /* ---------- normalize popover ---------- */
-#normPop,#gainPop{
+#normPop,#gainPop,#silPop{
   position:fixed;display:none;z-index:9000;
   background:var(--panel);border:1px solid var(--line2);border-radius:6px;
   box-shadow:var(--shadow2);padding:10px;min-width:216px;
   font-size:12px;color:var(--text);
 }
-#normPop .row,#gainPop .row{display:flex;align-items:center;gap:6px;margin-bottom:8px}
-#normPop .row:last-child,#gainPop .row:last-child{margin-bottom:0}
-#normPop input,#gainPop input{
+#normPop .row,#gainPop .row,#silPop .row{display:flex;align-items:center;gap:6px;margin-bottom:8px}
+#normPop .row:last-child,#gainPop .row:last-child,#silPop .row:last-child{margin-bottom:0}
+#normPop input,#gainPop input,#silPop input{
   width:66px;font-family:var(--mono);font-size:12px;color:var(--amber);
   background:var(--edbg);border:1px solid var(--line2);border-radius:4px;padding:4px 6px;
   user-select:text;-webkit-user-select:text;text-align:right;
 }
-#normPop .presets button,#gainPop .presets button{
+#silPop select{
+  font-family:var(--ui);font-size:11px;font-weight:600;color:var(--text);
+  background:var(--btn);border:1px solid var(--line2);border-radius:4px;padding:3px 4px;
+}
+#normPop .presets button,#gainPop .presets button,#silPop .presets button{
   flex:1;font-family:var(--mono);font-size:10.5px;color:var(--text);
   background:var(--btn);border:1px solid var(--line2);border-radius:4px;
   padding:4px 0;cursor:pointer;
 }
-#normPop .presets button:hover,#gainPop .presets button:hover{background:var(--btn-h)}
-#normPop .apply,#gainPop .apply{
+#normPop .presets button:hover,#gainPop .presets button:hover,#silPop .presets button:hover{background:var(--btn-h)}
+#normPop .apply,#gainPop .apply,#silPop .apply{
   width:100%;font-family:var(--ui);font-weight:600;font-size:12px;
   color:var(--acc-contrast);background:var(--amber);
   border:1px solid var(--amber);border-radius:4px;padding:6px 0;cursor:pointer;
 }
-#normPop .apply:hover,#gainPop .apply:hover{opacity:.88}
-
+#normPop .apply:hover,#gainPop .apply:hover,#silPop .apply:hover{opacity:.88}
 /* ---------- about / license modal ---------- */
 #aboutBtn{
   font-family:var(--ui);font-size:12px;font-weight:600;color:var(--dim);
@@ -297,7 +297,6 @@ canvas.overview{position:absolute;inset:0;width:100%;height:100%;cursor:pointer}
 </style>
 </head>
 <body>
-
 <div id="appbar">
 <a class="studio-brand" href="https://raito.studio/" aria-label="Raito Studio home"><span class="studio-mark" aria-hidden="true"></span><span class="studio-wordmark"><strong>Raito</strong> Studio Tools</span></a><nav class="studio-nav" aria-label="Raito Studio apps"><a href="https://tally.raito.studio/" title="Write and analyze text, character counts and lyrics.">TALLY</a><a href="https://carve.raito.studio/" aria-current="page" title="Trim, edit and export audio in your browser.">CARVE</a><a href="https://keys.raito.studio/" title="Play piano and organ, practice and record ideas.">KEYS</a><a href="https://pitch.raito.studio/" title="Tune guitar, bass and other instruments.">PITCH</a></nav>
   <div class="spacer"></div>
@@ -307,60 +306,45 @@ canvas.overview{position:absolute;inset:0;width:100%;height:100%;cursor:pointer}
   <button class="btn warm" id="openBtn">Open…</button>
   <input type="file" id="fileInput" accept="audio/*,.wav,.aif,.aiff,.flac,.mp3,.ogg,.m4a" multiple hidden>
 </div>
-
 <div id="desktop">
   <div id="empty">
     <div class="big">DROP AUDIO FILES</div>
     <div class="small">Drop WAV / AIFF / FLAC / MP3 files here, or use Open (top right)</div>
   </div>
 </div>
-
 <div id="ghost"><span id="ghostLabel"></span><canvas id="ghostCanvas"></canvas></div>
 <div id="toast"></div>
-
 <div id="modalBack">
   <div id="aboutModal">
     <button class="close" id="aboutClose" title="Close">×</button>
     <h2>CARVE</h2>
     <div class="tag">WAVE EDITOR · LISA RECORDS</div>
     <p>A wave editor that runs entirely in your browser. Audio files you load are processed <strong>only on your device</strong> — nothing is ever uploaded to or stored on a server. No install, no account.</p>
-
     <h3>Features</h3>
-    <p>Loads WAV / AIFF / FLAC / MP3. Range selection with zero-cross snapping (hold Shift for raw selection), fade in/out (5 curves), normalize, gain (±dB), delete / copy / paste (insert at cursor) / extract selection to a new file, loop playback, play-from-start, loop seam check (auditions the end→start transition), markers (add / remove / clear, beat-grid snap on/off — hold Shift to bypass), bar/beat ruler (set BPM and time signature in the status bar), OGG loop tags (LOOPSTART / LOOPLENGTH read into markers on import, and embedded from markers 1–2 on export), click-to-copy time and sample readouts in the status bar, undo/redo, light/dark theme. Exports WAV (16/24-bit + TPDF dither, 32-bit float), OGG Vorbis (VBR quality) and MP3 (CBR bitrate).</p>
-
+    <p>Loads WAV / AIFF / FLAC / MP3. Range selection with zero-cross snapping (hold Shift for raw selection), fade in/out (5 curves), normalize, gain (±dB), insert silence (sec · ms · samples · beats · bars), delete / copy / paste (insert at cursor) / extract selection to a new file, per-channel peak meters (peak hold, clip latch, max-peak readout — click the meter to reset), loop playback, play-from-start, loop seam check (auditions the end→start transition), markers (add / remove / clear, beat-grid snap on/off — hold Shift to bypass), Sound Forge–compatible WAV markers (cue points, region ends and sample-loop points are read into markers on import, and markers are written back as standard cue points on WAV export), bar/beat ruler (set BPM and time signature in the status bar), OGG loop tags (LOOPSTART / LOOPLENGTH read into markers on import, and embedded from markers 1–2 on export), click-to-copy time and sample readouts in the status bar, undo/redo, light/dark theme. Exports WAV (16/24-bit + TPDF dither, 32-bit float), OGG Vorbis (VBR quality) and MP3 (CBR bitrate).</p>
     <h3>Credits</h3>
     <p>Designed &amp; built by <a href="https://lisareco.com" target="_blank" rel="noopener">Raito / Lisa Records Inc. (株式会社リサレコ)</a>.</p>
     <p>OGG Vorbis encoding by <a href="https://github.com/arseneyr/wasm-media-encoders" target="_blank" rel="noopener">wasm-media-encoders</a>, which bundles the Xiph.Org <a href="https://xiph.org/vorbis/" target="_blank" rel="noopener">libVorbis</a> codec.</p>
     <p>MP3 encoding by the same library, which bundles the <a href="https://lame.sourceforge.io/" target="_blank" rel="noopener">LAME</a> MP3 encoder (LGPL).</p>
-
     <h3>Open Source Licenses</h3>
     <p>wasm-media-encoders — MIT License</p>
     <div class="lic">MIT License
-
 Copyright (c) 2020-2024 arseneyr
-
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</div>
     <p style="margin-top:12px">libVorbis — Copyright (c) 2002-2020 Xiph.Org Foundation</p>
     <div class="lic">Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-
 - Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 - Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 - Neither the name of the Xiph.Org Foundation nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
-
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE FOUNDATION OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE.</div>
-
     <p>Loaded files keep their original sample rate (48kHz stays 48kHz — no automatic resampling to the browser output rate). For WAV / AIFF / FLAC / MP3 the exact rate is read from the file header.</p>
-
     <h3>Disclaimer</h3>
     <p>This tool is provided as-is. The author accepts no liability for the results of any processing. Always keep backups of important audio files.</p>
-    <p style="color:var(--dim);font-size:11px;margin-top:14px">Version 2026.07.07d · © 2026 Lisa Records Inc. (株式会社リサレコ)</p>
+    <p style="color:var(--dim);font-size:11px;margin-top:14px">Version 2026.09.25a · © 2026 Lisa Records Inc. (株式会社リサレコ)</p>
   </div>
 </div>
-
 <script>
 "use strict";
 /* ============================================================
@@ -373,7 +357,6 @@ const ghost = document.getElementById('ghost');
 const ghostLabel = document.getElementById('ghostLabel');
 const ghostCanvas = document.getElementById('ghostCanvas');
 const toastEl = document.getElementById('toast');
-
 /* ---------- theme (WEAVE palette, shared with TALLY) ---------- */
 const THEMES = {
   light:{ cvBg:'#FAF9F6', ovBg:'#F3F1EA', grid:'rgba(90,100,120,.18)', lbl:'#9A9484',
@@ -384,7 +367,9 @@ const THEMES = {
     bar:'rgba(60,90,130,.50)', beat:'rgba(60,90,130,.18)',
     barLbl:'rgba(40,70,110,.95)', beatLbl:'rgba(40,70,110,.55)',
     marker:'#8A55C0', markerLine:'rgba(138,85,192,.6)', markerTxt:'#FFFFFF',
-    vpStroke:'#B5722F', vpFill:'rgba(181,114,47,.08)', ghost:'#B06B33' },
+    vpStroke:'#B5722F', vpFill:'rgba(181,114,47,.08)', ghost:'#B06B33',
+    mTick:'rgba(90,100,120,.25)', mLbl:'#9A9484', mGood:'#4C7A55', mWarn:'#A0782A',
+    mClip:'#A34B3E', mHold:'#2B2A26', mClipOff:'rgba(43,42,38,.12)' },
   dark:{ cvBg:'#0d1014', ovBg:'#0b0e12', grid:'rgba(80,95,110,.14)', lbl:'#48535f',
     mid:'#3a4350', midSoft:'rgba(58,67,80,.5)',
     wave:['#ffb36b','#f08348','#e0572f'], waveOv:'#6b4a33',
@@ -393,20 +378,19 @@ const THEMES = {
     bar:'rgba(138,166,204,.50)', beat:'rgba(138,166,204,.18)',
     barLbl:'rgba(178,204,236,.95)', beatLbl:'rgba(178,204,236,.55)',
     marker:'#d08bff', markerLine:'rgba(208,139,255,.7)', markerTxt:'#1a1020',
-    vpStroke:'#ffb36b', vpFill:'rgba(255,179,107,.07)', ghost:'#f08348' }
+    vpStroke:'#ffb36b', vpFill:'rgba(255,179,107,.07)', ghost:'#f08348',
+    mTick:'rgba(120,140,160,.22)', mLbl:'#48535f', mGood:'#8DE0A0', mWarn:'#FFD27F',
+    mClip:'#C96A55', mHold:'#D9D6CC', mClipOff:'rgba(217,214,204,.12)' }
 };
 if(localStorage.getItem('carve.theme')==='dark') document.body.classList.add('dark');
 let CV = document.body.classList.contains('dark') ? THEMES.dark : THEMES.light;
 let AC = null;
 function ac(){ if(!AC) AC = new (window.AudioContext||window.webkitAudioContext)(); return AC; }
-
 let zTop = 10;
 let winCount = 0;
 const wins = new Map();
 let activeWin = null;
-
 const BLOCK = 256; // peak pyramid block size
-
 function toast(msg){
   toastEl.textContent = msg;
   toastEl.classList.add('show');
@@ -430,7 +414,6 @@ function fallbackCopy(text, done){
 }
 const clamp = (v,a,b)=>Math.max(a,Math.min(b,v));
 const dB = v => v<=0 ? '-inf' : (20*Math.log10(v)).toFixed(2);
-
 /* ---------- peak pyramid ---------- */
 function buildPeaks(channels){
   return channels.map(ch=>{
@@ -457,7 +440,6 @@ function refreshPeaks(w, s, e){
     }
   });
 }
-
 /* ---------- window creation ---------- */
 function createWindow(name, sampleRate, channels, x, y){
   winCount++;
@@ -501,12 +483,16 @@ function createWindow(name, sampleRate, channels, x, y){
       <button class="tbtn" data-a="extract" title="Extract selection to a new file">Extract → New</button>
       <button class="tbtn" data-a="copy" title="Copy selection (⌘C)">Copy</button>
       <button class="tbtn" data-a="paste" title="Insert-paste at cursor (⌘V)" disabled>Paste</button>
+      <button class="tbtn" data-a="silence" title="Insert silence at the cursor (or at the selection start) — length in sec / ms / samples / beats / bars">Silence</button>
       <button class="tbtn" data-a="del" title="Delete selection (Del)">Delete</button>
       <button class="tbtn" data-a="clearmk" title="Remove all markers — double-click a marker head to remove just one, ⇧M removes the one nearest the cursor">Clear Mk</button>
       <button class="tbtn" data-a="undo" title="Undo (⌘Z)" disabled>Undo</button>
       <button class="tbtn" data-a="redo" title="Redo (⇧⌘Z / ⌘Y)" disabled>Redo</button>
     </div>
-    <div class="canvaswrap"><canvas class="wave"></canvas></div>
+    <div class="canvaswrap">
+      <div class="wavearea"><canvas class="wave"></canvas></div>
+      <div class="meterarea" title="Peak meter — click to reset clip lamp & peak hold"><canvas class="meter"></canvas></div>
+    </div>
     <div class="overviewwrap"><canvas class="overview"></canvas></div>
     <div class="statusbar">
       <span class="copyable" data-copy="len" title="Click to copy">len <b class="st-len"></b></span>
@@ -537,7 +523,7 @@ function createWindow(name, sampleRate, channels, x, y){
         <option value="256">256kbps</option>
         <option value="320" selected>320kbps</option>
       </select>
-      <button class="tbtn" data-a="export" title="Export audio">Export WAV</button>
+      <button class="tbtn" data-a="export" title="Export audio — WAV export includes markers as Sound Forge-compatible cue points">Export WAV</button>
     </div>
     <div class="statusbar">
       <span class="copyable" data-copy="lensmp" title="Click to copy (samples)">len <b class="st-lensmp"></b> smp</span>
@@ -558,7 +544,6 @@ function createWindow(name, sampleRate, channels, x, y){
     </div>`;
   desktop.appendChild(el);
   emptyEl.style.display = 'none';
-
   const w = {
     id, el, name, sampleRate, channels,
     peaks: buildPeaks(channels),
@@ -571,8 +556,11 @@ function createWindow(name, sampleRate, channels, x, y){
     undo: [], redo: [],
     wave: el.querySelector('canvas.wave'),
     over: el.querySelector('canvas.overview'),
+    meter: el.querySelector('canvas.meter'),
+    mLevel: [], mHold: [], mHoldT: [], mMax: [], mClip: [], mPrevS: null, mLastT: 0,
   };
   wins.set(id, w);
+  meterReset(w);
   const fnEl = el.querySelector('.fname');
   fnEl.textContent = name;
   fnEl.title = 'Click to copy file name';
@@ -588,7 +576,6 @@ function createWindow(name, sampleRate, channels, x, y){
   refreshPasteButtons();
   return w;
 }
-
 function updateMeta(w){
   w.el.querySelector('.meta').textContent =
     `${(w.sampleRate/1000).toFixed(1)}kHz · ${w.channels.length}ch · ${fmtTime(w.length,w.sampleRate)}`;
@@ -598,12 +585,10 @@ function updateMeta(w){
   w.peaks.forEach(p=>{ for(let i=0;i<p.mx.length;i++){ pk=Math.max(pk,p.mx[i],-p.mn[i]); }});
   w.el.querySelector('.st-peak').textContent = dB(pk);
 }
-
 function setCursorReadout(w, s){
   w.el.querySelector('.st-cur').textContent = fmtTime(s, w.sampleRate);
   w.el.querySelector('.st-cursmp').textContent = Math.round(s).toLocaleString();
 }
-
 function setActive(w){
   if(activeWin && activeWin!==w) activeWin.el.classList.remove('active');
   activeWin = w;
@@ -611,7 +596,6 @@ function setActive(w){
   w.el.style.zIndex = ++zTop;
   document.title = w.name + ' — CARVE';
 }
-
 function closeWindow(w){
   stopPlay(w);
   w.el.remove();
@@ -627,10 +611,9 @@ function closeWindow(w){
     if(top) setActive(top);
   }
 }
-
 /* ---------- canvas sizing / rendering ---------- */
 function sizeCanvases(w){
-  for(const c of [w.wave, w.over]){
+  for(const c of [w.wave, w.over, w.meter]){
     const r = c.parentElement.getBoundingClientRect();
     const dpr = window.devicePixelRatio||1;
     c.width  = Math.max(10, Math.round(r.width*dpr));
@@ -639,7 +622,6 @@ function sizeCanvases(w){
   clampView(w);
 }
 function cssW(c){ return c.width/(window.devicePixelRatio||1); }
-
 function clampView(w){
   const W = cssW(w.wave);
   w.spp = clamp(w.spp, 0.05, Math.max(0.05, w.length/Math.max(40,W)));
@@ -674,7 +656,6 @@ function snapToGrid(w, s){
   if(Math.abs(nearest-s)/w.spp <= 8) return clamp(Math.round(nearest), 0, w.length);
   return s;
 }
-
 function columnMinMax(w, ci, s0, s1){
   // min/max of channel ci over [s0,s1)
   s0 = clamp(Math.floor(s0),0,w.length); s1 = clamp(Math.ceil(s1),0,w.length);
@@ -693,7 +674,6 @@ function columnMinMax(w, ci, s0, s1){
   if(lo>hi){ lo=0; hi=0; }
   return [lo,hi];
 }
-
 function render(w){
   const c = w.wave, g = c.getContext('2d');
   const dpr = window.devicePixelRatio||1;
@@ -701,10 +681,8 @@ function render(w){
   const W = c.width/dpr, H = c.height/dpr;
   g.clearRect(0,0,W,H);
   g.fillStyle = CV.cvBg; g.fillRect(0,0,W,H);
-
   const nCh = w.channels.length;
   const laneH = H/nCh;
-
   // time grid
   g.strokeStyle = CV.grid; g.lineWidth = 1;
   const secPx = w.sampleRate / w.spp;
@@ -720,7 +698,6 @@ function render(w){
     g.beginPath(); g.moveTo(px,0); g.lineTo(px,H); g.stroke();
     g.fillText(fmtTime(t*w.sampleRate,w.sampleRate).slice(0,9), px+3, 10);
   }
-
   // bar / beat grid (labels drawn just below the seconds row)
   if(w.bpm > 0){
     const spBeat = w.sampleRate * 60 / w.bpm * (4 / w.tsigD);
@@ -752,7 +729,6 @@ function render(w){
       }
     }
   }
-
   for(let ci=0; ci<nCh; ci++){
     const yMid = laneH*ci + laneH/2;
     const amp = laneH*0.46*w.vzoom;
@@ -761,10 +737,8 @@ function render(w){
     g.strokeStyle = CV.mid; g.lineWidth = 1;
     g.beginPath(); g.moveTo(0,yMid); g.lineTo(W,yMid); g.stroke();
     if(ci>0){ g.strokeStyle=CV.midSoft; g.beginPath(); g.moveTo(0,laneH*ci); g.lineTo(W,laneH*ci); g.stroke(); }
-
     const grad = g.createLinearGradient(0, yMid-amp, 0, yMid+amp);
     grad.addColorStop(0,CV.wave[0]); grad.addColorStop(.5,CV.wave[1]); grad.addColorStop(1,CV.wave[2]);
-
     if(w.spp >= 1.5){
       g.fillStyle = grad;
       g.beginPath();
@@ -787,7 +761,6 @@ function render(w){
     }
     g.restore();
   }
-
   // selection
   if(w.selS>=0 && w.selE>w.selS){
     const x1 = sampleToPx(w,w.selS), x2 = sampleToPx(w,w.selE);
@@ -799,7 +772,6 @@ function render(w){
       if(x2>=0&&x2<=W){ g.beginPath(); g.moveTo(x2,0); g.lineTo(x2,H); g.stroke(); }
     }
   }
-
   // play cursor (dashed)
   const cpx = sampleToPx(w, w.cursor);
   if(cpx>=-1 && cpx<=W+1){
@@ -807,7 +779,6 @@ function render(w){
     g.beginPath(); g.moveTo(cpx,0); g.lineTo(cpx,H); g.stroke();
     g.setLineDash([]);
   }
-
   // markers
   const mono9 = 'bold 9px ' + getComputedStyle(document.body).getPropertyValue('--mono');
   w.markers.forEach((m,mi)=>{
@@ -822,27 +793,16 @@ function render(w){
     g.fillStyle = CV.markerTxt; g.font = mono9;
     g.fillText(String(mi+1), px-2.5, 9);
   });
-
   // playhead
   if(w.playing){
-    const elapsed = (ac().currentTime - w.playT0)*w.sampleRate;
-    let s;
-    if(w.seam){
-      const p = Math.min(elapsed, w.seam.total);
-      s = p < w.seam.pre ? w.seam.tailS + p : w.seam.headS + (p - w.seam.pre);
-    }else{
-      const span = Math.max(1, w.playEnd - w.playS0);
-      const off = w.playOff||0;
-      s = w.loop ? w.playS0 + ((off + elapsed) % span) : Math.min(w.playEnd, w.playS0 + off + elapsed);
-    }
-    const px = sampleToPx(w, s);
+    const px = sampleToPx(w, playPos(w));
     if(px>=0 && px<=W){
       g.strokeStyle = CV.playhead; g.lineWidth = 1.4;
       g.beginPath(); g.moveTo(px,0); g.lineTo(px,H); g.stroke();
     }
   }
-
   renderOverview(w);
+  drawMeter(w);
   // status
   const hasSel = w.selS>=0 && w.selE>w.selS;
   w.el.querySelector('.st-sel').textContent = hasSel
@@ -854,7 +814,6 @@ function render(w){
   w.el.querySelector('[data-a="undo"]').disabled = w.undo.length===0;
   w.el.querySelector('[data-a="redo"]').disabled = w.redo.length===0;
 }
-
 function renderOverview(w){
   const c = w.over, g = c.getContext('2d');
   const dpr = window.devicePixelRatio||1;
@@ -890,7 +849,6 @@ function renderOverview(w){
   g.fillStyle=CV.vpFill;
   g.fillRect(vx,1,Math.max(4,vw),H-2);
 }
-
 /* ---------- editing ops ---------- */
 function pushUndo(w, s, e, label){
   const snap = { type:'range', s, e, label, data: w.channels.map(ch=>ch.slice(s,e)) };
@@ -1032,7 +990,6 @@ function opNormalize(w, targetDb){
   refreshPeaks(w,s,e); updateMeta(w); render(w);
   toast(`Normalize → ${targetDb.toFixed(1)}dBFS (×${f.toFixed(3)}) ${hadSel?'(selection)':'(whole file)'}`);
 }
-
 /* ---------- normalize target popover ---------- */
 const normPop = document.createElement('div');
 normPop.id = 'normPop';
@@ -1082,7 +1039,6 @@ function showNormPop(w, btn){
   normDbInput.focus(); normDbInput.select();
 }
 function hideNormPop(){ normPop.style.display='none'; normTarget=null; }
-
 /* ---------- gain popover ---------- */
 const gainPop = document.createElement('div');
 gainPop.id = 'gainPop';
@@ -1148,6 +1104,78 @@ function opGain(w, db){
   const clip = pk>1 ? ` — ⚠ clipping (peak ${dB(pk)}dB)` : '';
   toast(`Gain ${db>=0?'+':''}${db.toFixed(1)}dB (×${f.toFixed(3)}) ${hadSel?'(selection)':'(whole file)'}${clip}`);
 }
+/* ---------- insert-silence popover ---------- */
+const silPop = document.createElement('div');
+silPop.id = 'silPop';
+silPop.innerHTML = `
+  <div class="row">Length
+    <input type="number" id="silVal" step="any" min="0" value="1">
+    <select id="silUnit" title="beat / bar use the BPM & time signature set in the status bar">
+      <option value="s" selected>sec</option>
+      <option value="ms">ms</option>
+      <option value="smp">smp</option>
+      <option value="beat">beat</option>
+      <option value="bar">bar</option>
+    </select>
+  </div>
+  <div class="row presets">
+    <button data-v="0.5" data-u="s">0.5s</button>
+    <button data-v="1" data-u="s">1s</button>
+    <button data-v="2" data-u="s">2s</button>
+    <button data-v="1" data-u="beat">1beat</button>
+    <button data-v="1" data-u="bar">1bar</button>
+  </div>
+  <div class="row"><button id="silApply" class="apply">Insert Silence</button></div>`;
+document.body.appendChild(silPop);
+let silTarget = null;
+let lastSilVal = 1, lastSilUnit = 's';
+const silValIn = silPop.querySelector('#silVal');
+const silUnitSel = silPop.querySelector('#silUnit');
+silPop.addEventListener('click', ev=>{
+  const p = ev.target.closest('[data-v]');
+  if(p){ silValIn.value = p.dataset.v; silUnitSel.value = p.dataset.u; silValIn.focus(); return; }
+  if(ev.target.id==='silApply') applySil();
+});
+silValIn.addEventListener('keydown', ev=>{
+  if(ev.key==='Enter') applySil();
+  if(ev.key==='Escape') hideSilPop();
+  ev.stopPropagation();
+});
+function silSamples(w, v, unit){
+  const spBeat = w.sampleRate*60/(w.bpm||120)*(4/w.tsigD);
+  switch(unit){
+    case 'ms':   return v/1000*w.sampleRate;
+    case 's':    return v*w.sampleRate;
+    case 'smp':  return v;
+    case 'beat': return v*spBeat;
+    case 'bar':  return v*spBeat*w.tsigN;
+  }
+  return 0;
+}
+function applySil(){
+  let v = parseFloat(silValIn.value);
+  const unit = silUnitSel.value;
+  const w = silTarget;
+  hideSilPop();
+  if(!w || !isFinite(v) || v<=0) return;
+  lastSilVal = v; lastSilUnit = unit;
+  let n = Math.round(silSamples(w, v, unit));
+  if(n < 1){ toast('Silence length is 0 samples — nothing inserted'); return; }
+  const cap = w.sampleRate*600;
+  if(n > cap){ n = cap; toast('Silence capped at 10 minutes'); }
+  opInsertSilence(w, n);
+}
+function showSilPop(w, btn){
+  silTarget = w;
+  silValIn.value = lastSilVal;
+  silUnitSel.value = lastSilUnit;
+  silPop.style.display = 'block';
+  const r = btn.getBoundingClientRect();
+  silPop.style.left = clamp(r.left, 8, window.innerWidth - silPop.offsetWidth - 8) + 'px';
+  silPop.style.top  = Math.min(r.bottom + 6, window.innerHeight - silPop.offsetHeight - 8) + 'px';
+  silValIn.focus(); silValIn.select();
+}
+function hideSilPop(){ silPop.style.display='none'; silTarget=null; }
 window.addEventListener('pointerdown', ev=>{
   if(normPop.style.display==='block'
      && !ev.target.closest('#normPop')
@@ -1155,6 +1183,9 @@ window.addEventListener('pointerdown', ev=>{
   if(gainPop.style.display==='block'
      && !ev.target.closest('#gainPop')
      && !ev.target.closest('[data-a="gain"]')) hideGainPop();
+  if(silPop.style.display==='block'
+     && !ev.target.closest('#silPop')
+     && !ev.target.closest('[data-a="silence"]')) hideSilPop();
 }, true);
 let extractCount = 0;
 function opDelete(w){
@@ -1182,7 +1213,6 @@ function opDelete(w){
   clampView(w); updateMeta(w); render(w);
   toast(`Deleted: ${fmtTime(n,w.sampleRate)}`);
 }
-
 function opExtract(w, x, y){
   const r = selRange(w,false);
   if(!r){ toast('Select a range first'); return; }
@@ -1194,7 +1224,6 @@ function opExtract(w, x, y){
   toast(`New file: ${nw.name} (${fmtTime(e-s,w.sampleRate)})`);
   return nw;
 }
-
 /* ---------- copy / paste ----------
    clipboard = { sampleRate, channels:[Float32Array,...] }
    Paste inserts at current cursor (split-insert). Channel-count
@@ -1257,12 +1286,176 @@ function opPaste(w){
   const note = clipboard.sampleRate!==w.sampleRate ? ` (note: SR ${clipboard.sampleRate}→${w.sampleRate} not converted)` : '';
   toast(`Pasted: ${fmtTime(n,w.sampleRate)} @ ${fmtTime(at,w.sampleRate)}${note}`);
 }
-
+/* ---------- insert silence ----------
+   Split-inserts n zero samples at the cursor (or at the selection start
+   when a range is selected). Shares the 'paste' undo/redo machinery. */
+function opInsertSilence(w, n){
+  n = Math.round(n);
+  if(!(n>0)) return;
+  stopPlay(w);
+  const hasSel = w.selS>=0 && w.selE>w.selS;
+  const at = clamp(Math.round(hasSel ? w.selS : w.cursor), 0, w.length);
+  const snap = { type:'paste', s:at, n, label:'Insert Silence', markers: w.markers.slice() };
+  w.undo.push(snap); if(w.undo.length>8) w.undo.shift();
+  w.redo.length = 0;
+  w.channels = w.channels.map(ch=>{
+    const out = new Float32Array(ch.length + n);   // zero-filled = silence
+    out.set(ch.subarray(0,at), 0);
+    out.set(ch.subarray(at), at + n);
+    return out;
+  });
+  w.length += n;
+  w.peaks = buildPeaks(w.channels);
+  // markers after insertion point shift right
+  w.markers = w.markers.map(m=> m>=at ? m+n : m);
+  w.selS = at; w.selE = at + n;
+  w.cursor = at + n;
+  clampView(w); updateMeta(w); render(w);
+  toast(`Silence inserted: ${fmtTime(n,w.sampleRate)} (${n.toLocaleString()} smp) @ ${fmtTime(at,w.sampleRate)}`);
+}
+/* ---------- peak meter ---------- */
+const METER_FLOOR = -60;   // dB at the bottom of the scale
+const METER_DECAY = 30;    // bar release speed (dB/s)
+const HOLD_MS = 1500;      // peak-hold time before the hold line starts falling
+const HOLD_DECAY = 15;     // peak-hold fall speed after the hold time (dB/s)
+const CLIP_AT = 0.9999;    // |sample| at/above this latches the clip lamp
+function playPos(w){
+  // current playback position in absolute samples (null when stopped)
+  if(!w.playing) return null;
+  const elapsed = (ac().currentTime - w.playT0)*w.sampleRate;
+  if(w.seam){
+    const p = Math.min(elapsed, w.seam.total);
+    return p < w.seam.pre ? w.seam.tailS + p : w.seam.headS + (p - w.seam.pre);
+  }
+  const span = Math.max(1, w.playEnd - w.playS0);
+  const off = w.playOff||0;
+  return w.loop ? w.playS0 + ((off + elapsed) % span) : Math.min(w.playEnd, w.playS0 + off + elapsed);
+}
+function meterReset(w, full=true){
+  const n = w.channels.length;
+  w.mLevel = new Array(n).fill(0);
+  if(full){
+    w.mHold  = new Array(n).fill(0);
+    w.mHoldT = new Array(n).fill(0);
+    w.mMax   = new Array(n).fill(0);
+    w.mClip  = new Array(n).fill(false);
+  }
+  w.mPrevS = null; w.mLastT = 0;
+}
+function rangePeaks(w, s0, s1){
+  // per-channel abs peak over [s0,s1) — rides the peak pyramid, so it's cheap
+  s0 = clamp(Math.floor(s0),0,w.length); s1 = clamp(Math.ceil(s1),0,w.length);
+  return w.channels.map((_,ci)=>{
+    if(s1<=s0) return 0;
+    const [lo,hi] = columnMinMax(w, ci, s0, s1);
+    return Math.max(Math.abs(lo), Math.abs(hi));
+  });
+}
+function meterApply(w, peaks, dtMs){
+  const rel  = Math.pow(10, -(METER_DECAY*(dtMs/1000))/20);
+  const hrel = Math.pow(10, -(HOLD_DECAY *(dtMs/1000))/20);
+  const now = performance.now();
+  peaks.forEach((p,ci)=>{
+    w.mLevel[ci] = Math.max(p, (w.mLevel[ci]||0)*rel);
+    if(p >= (w.mHold[ci]||0)){ w.mHold[ci] = p; w.mHoldT[ci] = now; }
+    else if(now - w.mHoldT[ci] > HOLD_MS){
+      w.mHold[ci] = Math.max(w.mLevel[ci], w.mHold[ci]*hrel);
+    }
+    if(p > (w.mMax[ci]||0)) w.mMax[ci] = p;
+    if(p >= CLIP_AT) w.mClip[ci] = true;
+  });
+}
+function meterMeasure(w){
+  // sample-accurate metering: scans exactly the samples played since the
+  // previous frame, so short transients never slip between frames
+  const cur = playPos(w);
+  if(cur===null) return;
+  const now = performance.now();
+  const dt = w.mLastT ? Math.min(200, now - w.mLastT) : 0;
+  w.mLastT = now;
+  if(w.mPrevS===null){ w.mPrevS = cur; return; }
+  let peaks;
+  if(cur >= w.mPrevS){
+    peaks = rangePeaks(w, w.mPrevS, Math.max(cur, w.mPrevS+1));
+  }else{
+    // wrapped (loop) or jumped (seam): tail piece + head piece
+    const jump = w.seam ? w.seam.headS : w.playS0;
+    const a = rangePeaks(w, w.mPrevS, w.playEnd);
+    const b = rangePeaks(w, jump, cur);
+    peaks = a.map((v,i)=>Math.max(v, b[i]));
+  }
+  w.mPrevS = cur;
+  meterApply(w, peaks, dt);
+}
+function drawMeter(w){
+  const c = w.meter; if(!c) return;
+  const g = c.getContext('2d');
+  const dpr = window.devicePixelRatio||1;
+  g.setTransform(dpr,0,0,dpr,0,0);
+  const W = c.width/dpr, H = c.height/dpr;
+  g.clearRect(0,0,W,H);
+  g.fillStyle = CV.ovBg; g.fillRect(0,0,W,H);
+  const nCh = Math.max(1, w.channels.length);
+  const ledH = 9, roH = 13;                       // clip lamps on top, max-dB readout at bottom
+  const top = ledH+2, bot = Math.max(top+10, H-roH-2);
+  const scaleH = bot-top;
+  const barX0 = 3, lblW = 13;
+  const barsW = Math.max(6, W-barX0-lblW);
+  const dbY = d => top + clamp(-d/(-METER_FLOOR), 0, 1)*scaleH;
+  const mono = getComputedStyle(document.body).getPropertyValue('--mono');
+  // dB ticks
+  g.font = '7.5px '+mono;
+  [[0,'0'],[-3,null],[-6,'6'],[-12,'12'],[-24,'24'],[-48,'48']].forEach(([d,lbl])=>{
+    const y = Math.round(dbY(d));
+    g.strokeStyle = CV.mTick; g.lineWidth = 1;
+    g.beginPath(); g.moveTo(barX0, y+.5); g.lineTo(barX0+barsW, y+.5); g.stroke();
+    if(lbl){ g.fillStyle = CV.mLbl; g.fillText(lbl, barX0+barsW+2, y+3); }
+  });
+  // level gradient fixed to the dB scale: red near 0dB, amber to ~-13dB, green below
+  const grad = g.createLinearGradient(0, top, 0, bot);
+  grad.addColorStop(0, CV.mClip);
+  grad.addColorStop(.06, CV.mWarn);
+  grad.addColorStop(.22, CV.mGood);
+  grad.addColorStop(1, CV.mGood);
+  const gap = 2;
+  const bw = Math.max(2, (barsW - gap*(nCh-1))/nCh);
+  const toDb = v => v>0 ? 20*Math.log10(v) : -999;
+  for(let ci=0; ci<nCh; ci++){
+    const x = barX0 + ci*(bw+gap);
+    // level bar
+    const lv = toDb(w.mLevel[ci]||0);
+    if(lv > METER_FLOOR){
+      const y = dbY(Math.min(0,lv));
+      g.fillStyle = grad;
+      g.fillRect(x, y, bw, bot-y);
+    }
+    // peak-hold line
+    const hd = toDb(w.mHold[ci]||0);
+    if(hd > METER_FLOOR){
+      const y = dbY(Math.min(0,hd));
+      g.fillStyle = (w.mHold[ci]||0) >= CLIP_AT ? CV.mClip : CV.mHold;
+      g.fillRect(x, Math.max(top, y-1), bw, 2);
+    }
+    // clip lamp (latches until the meter is clicked or playback restarts)
+    g.fillStyle = w.mClip[ci] ? CV.mClip : CV.mClipOff;
+    g.fillRect(x, 2, bw, 6);
+  }
+  // numeric readout: max peak since play start
+  let mx = 0; (w.mMax||[]).forEach(v=>{ if(v>mx) mx=v; });
+  const clip = (w.mClip||[]).some(Boolean);
+  let txt = mx>0 ? (20*Math.log10(mx)).toFixed(1) : '—';
+  if(txt==='-0.0') txt='0.0';
+  g.font = '8px '+mono;
+  g.fillStyle = clip ? CV.mClip : CV.mLbl;
+  g.fillText(txt, Math.max(1,(W-g.measureText(txt).width)/2), H-4);
+}
 /* ---------- playback ---------- */
 function stopPlay(w){
   if(w.src){ try{w.src.stop();}catch(e){} w.src=null; }
   w.playing=false;
   w.seam=null;
+  if(w.mLevel) w.mLevel.fill(0);       // bars drop; clip lamp / hold / max stay readable
+  w.mPrevS=null; w.mLastT=0;
   w.el.querySelector('[data-a="play"]').textContent='▶';
 }
 function playFromStart(w){
@@ -1271,6 +1464,7 @@ function playFromStart(w){
   if(ctx.state==='suspended') ctx.resume();
   const e = w.length;
   if(e<1) return;
+  meterReset(w);
   const buf = ctx.createBuffer(w.channels.length, e, w.sampleRate);
   w.channels.forEach((ch,ci)=>buf.getChannelData(ci).set(ch));
   const src = ctx.createBufferSource();
@@ -1282,6 +1476,7 @@ function playFromStart(w){
   w.el.querySelector('[data-a="play"]').textContent='■';
   (function loop(){
     if(!w.playing) return;
+    meterMeasure(w);
     render(w);
     requestAnimationFrame(loop);
   })();
@@ -1294,6 +1489,7 @@ function playSeam(w){
   if(w.selS>=0 && w.selE>w.selS){ s=w.selS; e=w.selE; }
   const pre = Math.min(Math.round(w.sampleRate*1.0), Math.floor((e-s)/2));
   if(pre<16){ toast('Range too short for a seam check'); return; }
+  meterReset(w);
   const buf = ctx.createBuffer(w.channels.length, pre*2, w.sampleRate);
   w.channels.forEach((ch,ci)=>{
     const d = buf.getChannelData(ci);
@@ -1310,6 +1506,7 @@ function playSeam(w){
   w.el.querySelector('[data-a="play"]').textContent='■';
   (function loop(){
     if(!w.playing) return;
+    meterMeasure(w);
     render(w);
     requestAnimationFrame(loop);
   })();
@@ -1318,6 +1515,7 @@ function togglePlay(w){
   if(w.playing){ stopPlay(w); render(w); return; }
   const ctx = ac();
   if(ctx.state==='suspended') ctx.resume();
+  meterReset(w);
   let s=0, e=w.length, loop=false, startAt=0;
   if(w.selS>=0 && w.selE>w.selS){
     s=w.selS; e=w.selE; loop=true;
@@ -1339,21 +1537,25 @@ function togglePlay(w){
   w.el.querySelector('[data-a="play"]').textContent='■';
   (function loop(){
     if(!w.playing) return;
+    meterMeasure(w);
     render(w);
     requestAnimationFrame(loop);
   })();
 }
-
 /* ---------- WAV export ---------- */
 function encodeWav(w, fmt){
   const nCh=w.channels.length, n=w.length, sr=w.sampleRate;
   const bps = fmt==='16'?2 : fmt==='24'?3 : 4;
   const isFloat = fmt==='32f';
   const dataSize = n*nCh*bps;
-  const buf = new ArrayBuffer(44+dataSize);
+  const pad = dataSize & 1;                                // RIFF chunks are word-aligned
+  // markers → Sound Forge-compatible 'cue ' chunk appended after the data chunk
+  const mks = w.markers.map(m=>clamp(Math.round(m),0,w.length)).sort((a,b)=>a-b);
+  const cueSize = mks.length ? 8 + 4 + mks.length*24 : 0;  // chunk header + count + entries
+  const buf = new ArrayBuffer(44+dataSize+pad+cueSize);
   const v = new DataView(buf);
   const ws=(o,s)=>{for(let i=0;i<s.length;i++)v.setUint8(o+i,s.charCodeAt(i));};
-  ws(0,'RIFF'); v.setUint32(4,36+dataSize,true); ws(8,'WAVE');
+  ws(0,'RIFF'); v.setUint32(4,36+dataSize+pad+cueSize,true); ws(8,'WAVE');
   ws(12,'fmt '); v.setUint32(16,16,true);
   v.setUint16(20,isFloat?3:1,true); v.setUint16(22,nCh,true);
   v.setUint32(24,sr,true); v.setUint32(28,sr*nCh*bps,true);
@@ -1379,6 +1581,23 @@ function encodeWav(w, fmt){
       if(fmt==='16'){ v.setInt16(o,q,true); o+=2; }
       else { v.setUint8(o,q&255); v.setUint8(o+1,(q>>8)&255); v.setUint8(o+2,(q>>16)&255); o+=3; }
     }
+  }
+  // cue chunk: one cue point per marker, exactly as Sound Forge writes markers
+  // (IDs 1..n in position order, offsets in sample frames, fccChunk='data')
+  if(mks.length){
+    let c = 44 + dataSize + pad;
+    ws(c,'cue '); v.setUint32(c+4, 4 + mks.length*24, true);
+    v.setUint32(c+8, mks.length, true);
+    c += 12;
+    mks.forEach((m,i)=>{
+      v.setUint32(c, i+1, true);       // dwName: cue point ID
+      v.setUint32(c+4, m, true);       // dwPosition (play order — same as the offset here)
+      ws(c+8, 'data');                 // fccChunk
+      v.setUint32(c+12, 0, true);      // dwChunkStart (0: standard single-data-chunk WAV)
+      v.setUint32(c+16, 0, true);      // dwBlockStart (0 for PCM)
+      v.setUint32(c+20, m, true);      // dwSampleOffset (sample frames)
+      c += 24;
+    });
   }
   return new Blob([buf],{type:'audio/wav'});
 }
@@ -1439,7 +1658,6 @@ async function exportOgg(w, quality){
     oggBusy = false;
   }
 }
-
 /* ---------- OGG loop tags (LOOPSTART / LOOPLENGTH in the Vorbis comment) ---------- */
 // Ogg page CRC: CRC-32, poly 0x04C11DB7, init 0, no reflection, no final xor
 const OGG_CRC_TABLE = (()=>{
@@ -1477,7 +1695,6 @@ function injectOggLoopTags(bytes, loopStart, loopLength){
     let bodyLen = 0; for(let i=0;i<nsegs;i++) bodyLen += segTable[i];
     const pageEnd = bodyStart + bodyLen;
     const body = bytes.subarray(bodyStart, pageEnd);
-
     // comment header packet starts "\x03vorbis" and must begin this page (no continuation)
     if(!(headerType & 1) && bodyLen>7 && body[0]===3 &&
        body[1]===0x76 && body[2]===0x6f && body[3]===0x72 && body[4]===0x62 && body[5]===0x69 && body[6]===0x73){
@@ -1497,7 +1714,6 @@ function injectOggLoopTags(bytes, loopStart, loopLength){
       for(let i=0;i<count;i++){ const l = dv.getUint32(p, true); p += 4 + l; }
       const framingPos = p;                              // framing byte (must be 1) + anything after
       if(pkt[framingPos]!==1) return null;
-
       const addStrs = [`LOOPSTART=${loopStart}`, `LOOPLENGTH=${loopLength}`].map(s=>te.encode(s));
       const addLen = addStrs.reduce((a,s)=>a+4+s.length, 0);
       const newPkt = new Uint8Array(pktLen + addLen);
@@ -1507,7 +1723,6 @@ function injectOggLoopTags(bytes, loopStart, loopLength){
       let q = framingPos;
       for(const s of addStrs){ ndv.setUint32(q, s.length, true); q += 4; newPkt.set(s, q); q += s.length; }
       newPkt.set(pkt.subarray(framingPos), q);           // framing byte (and any trailing bytes)
-
       // rebuild the page
       const restLace = Array.from(segTable.subarray(segUsed));
       const newLace = [...laceSegments(newPkt.length), ...restLace];
@@ -1524,7 +1739,6 @@ function injectOggLoopTags(bytes, loopStart, loopLength){
       newPage[22]=0; newPage[23]=0; newPage[24]=0; newPage[25]=0;
       const crc = oggCrc32(newPage);
       newPage[22]=crc&0xff; newPage[23]=(crc>>>8)&0xff; newPage[24]=(crc>>>16)&0xff; newPage[25]=(crc>>>24)&0xff;
-
       const out = new Uint8Array(bytes.length - (pageEnd-off) + newPage.length);
       out.set(bytes.subarray(0, off), 0);
       out.set(newPage, off);
@@ -1570,7 +1784,76 @@ function readOggLoopTags(bytes){
   }
   return null;
 }
-
+/* ---------- WAV markers (Sound Forge-compatible) ----------
+   Import: the 'cue ' chunk (markers), LIST adtl → ltxt entries (region ends)
+   and the 'smpl' chunk (sampler loop points) are all read into CARVE markers.
+   Export: markers are written back as a standard 'cue ' chunk (see encodeWav),
+   which Sound Forge, Audacity, Reaper etc. show as markers.
+   → {markers:[ascending sample offsets], nCue, nRegion, nLoop} | null */
+function readWavMarkers(arr){
+  try{
+    const dv = new DataView(arr);
+    if(arr.byteLength < 12) return null;
+    const fcc = o => String.fromCharCode(dv.getUint8(o),dv.getUint8(o+1),dv.getUint8(o+2),dv.getUint8(o+3));
+    const tag = fcc(0);
+    if((tag!=='RIFF' && tag!=='RF64') || fcc(8)!=='WAVE') return null;
+    const cueById = new Map();       // cue point ID → sample offset
+    const regions = [];              // {cid, len} from ltxt — resolved after the walk (chunk order varies)
+    const pts = [];                  // raw marker positions
+    let nLoop = 0;
+    let o = 12;
+    while(o + 8 <= arr.byteLength){
+      const id = fcc(o);
+      const size = dv.getUint32(o+4, true);
+      const body = o + 8;
+      const bodyEnd = Math.min(arr.byteLength, body + size);
+      if(id==='cue ' && size>=4 && body+4<=arr.byteLength){
+        const n = dv.getUint32(body, true);
+        for(let i=0;i<n;i++){
+          const p = body + 4 + i*24;
+          if(p+24 > bodyEnd) break;
+          const cid = dv.getUint32(p, true);            // dwName (cue ID)
+          const off = dv.getUint32(p+20, true);         // dwSampleOffset (sample frames)
+          cueById.set(cid, off);
+          pts.push(off);
+        }
+      }else if(id==='LIST' && size>=4 && body+4<=arr.byteLength && fcc(body)==='adtl'){
+        let q = body + 4;
+        while(q + 8 <= bodyEnd){
+          const sid = fcc(q);
+          const ssz = dv.getUint32(q+4, true);
+          if(sid==='ltxt' && ssz>=8 && q+16<=bodyEnd){  // region: cue ID + length in samples
+            regions.push({ cid: dv.getUint32(q+8, true), len: dv.getUint32(q+12, true) });
+          }
+          q += 8 + ssz + (ssz & 1);
+        }
+      }else if(id==='smpl' && size>=36 && body+36<=arr.byteLength){
+        const n = dv.getUint32(body+28, true);          // cSampleLoops
+        for(let i=0;i<n;i++){
+          const p = body + 36 + i*24;
+          if(p+24 > bodyEnd) break;
+          const ls = dv.getUint32(p+8, true);           // dwStart (sample frames)
+          const le = dv.getUint32(p+12, true);          // dwEnd (inclusive per spec)
+          pts.push(ls);
+          pts.push(le+1);                               // exclusive end → same convention as markers 1–2 loops
+          nLoop++;
+        }
+      }
+      o = body + size + (size & 1);                     // chunks are word-aligned
+    }
+    let nRegion = 0;
+    for(const r of regions){
+      if(r.len>0 && cueById.has(r.cid)){ pts.push(cueById.get(r.cid)+r.len); nRegion++; }
+    }
+    if(!pts.length) return null;
+    // sort + dedupe (≤1 sample apart counts as the same point)
+    pts.sort((a,b)=>a-b);
+    const markers = [];
+    for(const m of pts){ if(!markers.length || m - markers[markers.length-1] > 1) markers.push(m); }
+    if(markers.length > 100) markers.length = 100;      // sanity cap
+    return { markers, nCue: cueById.size, nRegion, nLoop };
+  }catch(e){ return null; }
+}
 /* ---------- MP3 export (same WASM lib, LAME CBR) ---------- */
 let mp3EncP = null, mp3Busy = false;
 function getMp3Encoder(){
@@ -1635,14 +1918,19 @@ function opExport(w){
   a.download = w.name.replace(/\.[^.]+$/,'') + '.wav';
   a.click();
   setTimeout(()=>URL.revokeObjectURL(a.href),4000);
-  toast(`Exported: ${a.download} (${fmt==='32f'?'32-bit float':fmt+'-bit + TPDF dither'})`);
+  const mkNote = w.markers.length ? `, ${w.markers.length} marker${w.markers.length>1?'s':''} → cue` : '';
+  toast(`Exported: ${a.download} (${fmt==='32f'?'32-bit float':fmt+'-bit + TPDF dither'}${mkNote})`);
 }
-
 /* ---------- interaction ---------- */
 function bindWindow(w){
   const el = w.el;
   el.addEventListener('pointerdown', ()=>setActive(w));
   el.querySelector('.closebtn').addEventListener('click', ()=>closeWindow(w));
+  // meter: click resets the clip lamp, peak hold and max readout
+  el.querySelector('.meterarea').addEventListener('click', ()=>{
+    meterReset(w);
+    drawMeter(w);
+  });
   const fmtSel = el.querySelector('.fmt');
   fmtSel.addEventListener('change', ()=>{
     el.querySelector('.oggq').style.display = fmtSel.value==='ogg' ? '' : 'none';
@@ -1650,7 +1938,6 @@ function bindWindow(w){
     el.querySelector('[data-a="export"]').textContent =
       'Export ' + (fmtSel.value==='ogg' ? 'OGG' : fmtSel.value==='mp3' ? 'MP3' : 'WAV');
   });
-
   // BPM / time signature (bar-beat ruler)
   const bpmIn = el.querySelector('.bpm');
   bpmIn.addEventListener('change', ()=>{
@@ -1672,7 +1959,6 @@ function bindWindow(w){
   });
   const snapChk = el.querySelector('.snapgrid');
   snapChk.addEventListener('change', ()=>{ w.snapGrid = snapChk.checked; });
-
   // title bar drag
   const tb = el.querySelector('.titlebar');
   tb.addEventListener('pointerdown', ev=>{
@@ -1702,7 +1988,6 @@ function bindWindow(w){
     window.addEventListener('pointermove',move);
     window.addEventListener('pointerup',up);
   });
-
   // status bars: click a readout to copy (sample values copy without commas)
   el.querySelectorAll('.statusbar').forEach(sb=>{
     sb.addEventListener('click', ev=>{
@@ -1716,7 +2001,6 @@ function bindWindow(w){
       } else fallbackCopy(val, done);
     });
   });
-
   // toolbar / status actions
   el.addEventListener('click', ev=>{
     const a = ev.target.closest('[data-a]'); if(!a) return;
@@ -1737,6 +2021,7 @@ function bindWindow(w){
       case 'extract': opExtract(w); break;
       case 'copy': opCopy(w); break;
       case 'paste': opPaste(w); break;
+      case 'silence': showSilPop(w, a); break;
       case 'del': opDelete(w); break;
       case 'clearmk': clearMarkers(w); break;
       case 'undo': doUndo(w); break;
@@ -1744,7 +2029,6 @@ function bindWindow(w){
       case 'export': opExport(w); break;
     }
   });
-
   function zoomCursor(w, factor){
     // zoom anchored on the locator (play cursor): keep it centered
     w.spp *= factor;
@@ -1753,7 +2037,6 @@ function bindWindow(w){
     clampView(w);
     render(w);
   }
-
   // ---- wave canvas: select / drag-extract / cursor readout ----
   const wave = w.wave;
   wave.addEventListener('pointermove', ev=>{
@@ -1769,7 +2052,6 @@ function bindWindow(w){
     }
     return -1;
   }
-
   wave.addEventListener('dblclick', ev=>{
     const hi = hitMarker(ev.offsetX, ev.offsetY);
     if(hi>=0){
@@ -1784,7 +2066,6 @@ function bindWindow(w){
     }
     render(w);
   });
-
   let dragState = null;
   wave.addEventListener('pointerdown', ev=>{
     if(ev.button!==0) return;
@@ -1802,7 +2083,6 @@ function bindWindow(w){
     if(!dragState) return;
     const dx = ev.clientX-dragState.sx, dy = ev.clientY-dragState.sy;
     if(Math.hypot(dx,dy)>3) dragState.moved = true;
-
     if(dragState.mode==='marker'){
       let s = pxToSample(w, ev.offsetX);
       if(!ev.shiftKey) s = snapToGrid(w, s);
@@ -1859,7 +2139,6 @@ function bindWindow(w){
       render(w); return;
     }
   });
-
   function showGhost(w){
     ghostLabel.textContent = `→ New file  ${fmtTime(w.selE-w.selS,w.sampleRate)}`;
     const g = ghostCanvas.getContext('2d');
@@ -1879,7 +2158,6 @@ function bindWindow(w){
     g.fill();
     ghost.style.display='block';
   }
-
   // wheel: scroll / zoom
   wave.addEventListener('wheel', ev=>{
     ev.preventDefault();
@@ -1891,7 +2169,6 @@ function bindWindow(w){
       clampView(w); render(w);
     }
   },{passive:false});
-
   // overview: click/drag = pan
   const over = w.over;
   let ovDrag=false;
@@ -1904,7 +2181,6 @@ function bindWindow(w){
   over.addEventListener('pointermove', ev=>{ if(ovDrag) ovSeek(ev); });
   over.addEventListener('pointerup', ev=>{ ovDrag=false; over.releasePointerCapture(ev.pointerId); });
 }
-
 /* ---------- markers ---------- */
 function removeNearestMarker(w){
   if(!w.markers.length){ toast('No markers'); return; }
@@ -1929,7 +2205,6 @@ function addMarker(w){
   render(w);
   toast(`Marker ${w.markers.length}: ${fmtTime(m, w.sampleRate)}`);
 }
-
 /* ---------- global keys ---------- */
 window.addEventListener('keydown', ev=>{
   if(!activeWin) return;
@@ -1967,7 +2242,6 @@ window.addEventListener('keydown', ev=>{
     render(w);
   }
 });
-
 /* ---------- file loading ----------
    Key point: AudioContext.decodeAudioData() resamples the decoded buffer to
    the *context's* output sample rate (often 44.1k on macOS). To preserve the
@@ -1975,7 +2249,6 @@ window.addEventListener('keydown', ev=>{
    we (1) read the true sample rate from the file header, then (2) decode inside
    an OfflineAudioContext created at that exact rate — which decodes without
    resampling. Formats whose header we can't parse fall back to a two-pass decode. */
-
 // Read a 32-bit big-endian uint
 function readU32BE(dv, o){ return dv.getUint32(o, false); }
 // AIFF stores sample rate as an 80-bit IEEE 754 extended float at COMM offset
@@ -2079,7 +2352,6 @@ function sniffSampleRate(arr){
     return null;
   }catch(e){ return null; }
 }
-
 // Decode inside an OfflineAudioContext at the target rate → no resampling.
 async function decodeAtRate(arr, sr){
   const OAC = window.OfflineAudioContext || window.webkitOfflineAudioContext;
@@ -2088,16 +2360,18 @@ async function decodeAtRate(arr, sr){
   const octx = new OAC(1, 1, sr);
   return await octx.decodeAudioData(arr.slice(0));
 }
-
 async function loadFile(file, x, y){
   try{
     const arr = await file.arrayBuffer();
-    // read loop tags now — decodeAudioData may detach the buffer later
+    // read tags/markers now — decodeAudioData may detach the buffer later
     const h = new Uint8Array(arr, 0, Math.min(4, arr.byteLength));
     const loopTags = (h[0]===0x4f && h[1]===0x67 && h[2]===0x67 && h[3]===0x53)
       ? readOggLoopTags(new Uint8Array(arr)) : null;
+    const isRiff = h.length>=4 && h[0]===0x52 &&
+      ((h[1]===0x49 && h[2]===0x46 && h[3]===0x46) ||   // 'RIFF'
+       (h[1]===0x46 && h[2]===0x36 && h[3]===0x34));    // 'RF64'
+    const wavMk = isRiff ? readWavMarkers(arr) : null;
     let buf, nativeSR = sniffSampleRate(arr);
-
     if(nativeSR){
       // header gave us the true rate → decode at exactly that rate (no resample)
       try{ buf = await decodeAtRate(arr, nativeSR); }
@@ -2111,7 +2385,6 @@ async function loadFile(file, x, y){
       try{ buf = await decodeAtRate(arr, sr); }
       catch(e){ buf = probe; }   // last resort: use probe as-is
     }
-
     const channels = [];
     for(let ci=0;ci<buf.numberOfChannels;ci++){
       channels.push(new Float32Array(buf.getChannelData(ci)));
@@ -2126,6 +2399,21 @@ async function loadFile(file, x, y){
         toast(`Loop tags found: LOOPSTART=${s}, LOOPLENGTH=${e-s} → markers 1 & 2`);
       }
     }
+    if(wavMk && wavMk.markers.length){
+      // clamp to the decoded length, then re-dedupe anything the clamp collapsed
+      const ms = [];
+      for(const raw of wavMk.markers){
+        const m = clamp(Math.round(raw), 0, w.length);
+        if(!ms.length || m - ms[ms.length-1] > 1) ms.push(m);
+      }
+      w.markers = ms;
+      render(w);
+      const parts = [];
+      if(wavMk.nCue) parts.push(`${wavMk.nCue} cue`);
+      if(wavMk.nRegion) parts.push(`${wavMk.nRegion} region`);
+      if(wavMk.nLoop) parts.push(`${wavMk.nLoop} loop`);
+      toast(`WAV markers loaded: ${ms.length} (${parts.join(', ')})`);
+    }
     if(nativeSR && buf.sampleRate!==nativeSR){
       toast(`Warning: could not keep the sample rate of ${file.name} (${nativeSR}→${buf.sampleRate})`);
     }
@@ -2135,7 +2423,6 @@ async function loadFile(file, x, y){
   }
 }
 document.getElementById('openBtn').addEventListener('click', ()=>document.getElementById('fileInput').click());
-
 /* ---------- about modal ---------- */
 const modalBack = document.getElementById('modalBack');
 document.getElementById('aboutBtn').addEventListener('click', ()=>modalBack.classList.add('show'));
